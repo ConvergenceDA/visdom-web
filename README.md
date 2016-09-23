@@ -14,11 +14,11 @@ This document will help you get started using the VISDOM analytics website code 
 
 ### Quick start ###
 ```bash
-git clone https://github.com/ConvergenceDA/visdom-web.git
-cd visdom-web
-conda install --file conda_reqs.txt
-pip install -r pip_reqs.txt
-python VISDOM-server.py
+~ $ git clone https://github.com/ConvergenceDA/visdom-web.git
+~/visdom-web $ cd visdom-web
+~/visdom-web $ conda install --file conda_reqs.txt
+~/visdom-web $ pip install -r pip_reqs.txt
+~/visdom-web $ python VISDOM-server.py
 ```
 
 Here are line by line steps for getting started:
