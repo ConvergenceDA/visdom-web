@@ -14,11 +14,18 @@ This document will help you get started using the VISDOM analytics website code 
 
 ### Quick start ###
 ```bash
-~ $ git clone https://github.com/ConvergenceDA/visdom-web.git
-~/visdom-web $ cd visdom-web
-~/visdom-web $ conda install --file conda_reqs.txt
-~/visdom-web $ pip install -r pip_reqs.txt
-~/visdom-web $ python VISDOM-server.py
+$ git clone https://github.com/ConvergenceDA/visdom-web.git
+$ cd visdom-web
+$ conda install --file conda_reqs.txt
+$ pip install -r pip_reqs.txt
+
+<copy your data files into the data folder>
+<modify data_cfg.py.template to data_cfg.py pointing at your data files>
+<update example_META.csv with the features and labels you want to use>
+
+$ python VISDOM-server.py
+
+<browse in Chrome or Firefox to http://localhost:8080>
 ```
 
 Here are line by line steps for getting started:
