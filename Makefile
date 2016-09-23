@@ -1,0 +1,2 @@
+serve:
+	python SEServer.py

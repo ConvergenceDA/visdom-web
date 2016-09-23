@@ -1,0 +1,298 @@
+.navbar {
+  margin-bottom: 0;
+}
+
+section, main {
+  padding-top: 15px;
+}
+
+main {
+  z-index: 100;
+}
+
+.sidebar section:after {
+  content: " ";
+  display: block;
+  height: 1px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #fff;
+  margin: 0 -15px;
+}
+
+h3 {
+  font-size: 1.4em;
+  line-height: 1em;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+  h3 .glyphicon {
+    font-size: .7em;
+  }
+
+var {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+#chart-types {
+  margin-bottom: 15px;
+}
+
+.sidebar {
+  background: #efefef;
+  overflow-y: auto;
+}
+
+.sidebar .control-label {
+  /* color: #666; */
+  position: relative;
+  white-space: nowrap;
+}
+
+.nav-pills > li > a {
+  padding: 7.5px 10px;
+}
+
+svg {
+  user-select: none;
+}
+
+path.series {
+  fill: none;
+  stroke: red;
+  stroke-width: 2;
+}
+
+line.rule {
+  stroke: #000;
+  stroke-width: 1;
+}
+
+line.rule {
+  stroke-dasharray: 3, 4;
+}
+
+path.reference {
+  stroke: #000;
+}
+
+.cursor circle.value {
+  fill: red;
+}
+
+.cursor circle.reference {
+  fill: #000;
+}
+
+.cursor path.bracket {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.cursor .y-delta {
+  fill: red;
+  font-size: 12px;
+}
+
+.cursor .y-rule.value {
+  stroke: red;
+}
+
+.axis text {
+  font-size: 12px;
+}
+
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 1;
+  stroke-linecap: square;
+}
+
+.axis path.domain {
+  stroke: #000;
+}
+
+.axis text.label {
+  font-size: 16px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: normal;
+  font-style: italic;
+  color: #999;
+}
+
+.cumsum rect.region {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+.cumsum rect.region:hover {
+  /* fill: rgba(0,0,0,.01); */
+}
+
+#cumsum .cumsum {
+  position: relative;
+}
+
+  #cumsum .cumsum table {
+    background: rgba(255,255,255,.85);
+  }
+
+#charts .chart,
+#charts .legend {
+          transition: opacity, filter .3s;
+     -moz-transition: opacity, -moz-filter .3s;
+  -webkit-transition: opacity, -webkit-filter .3s;
+          filter: saturate(100%) blur(0px);
+     -moz-filter: saturate(100%);
+  -webkit-filter: saturate(100%) blur(0px);
+  opacity: 1;
+}
+
+#charts .chart.loading,
+#charts .legend.loading {
+          filter: saturate(5%) blur(1px);
+     -moz-filter: saturate(5%);
+  -webkit-filter: saturate(5%) blur(1px);
+  opacity: .8;
+}
+
+#charts #map .chart.loading {
+          filter: saturate(5%) blur(0px);
+     -moz-filter: saturate(5%);
+  -webkit-filter: saturate(5%) blur(0px);
+}
+
+#charts .legend.loading {
+          filter: saturate(5%) blur(0px);
+     -moz-filter: saturate(5%);
+  -webkit-filter: saturate(5%) blur(0px);
+}
+
+#charts form {
+  float: right;
+  position: relative;
+  width: 20%;
+  min-width: 15em;
+  margin-bottom: 2em;
+  padding-right: 1em;
+}
+
+.legend {
+  margin-bottom: 15px;
+}
+
+.legend .steps,
+.legend .steps .step {
+  list-style: none;
+  margin: 0 0 2px;
+  padding: 0;
+  line-height: 1.4em;
+}
+
+.legend .steps .step .swatch {
+  display: inline-block;
+  width: 1.4em;
+  height: 1.4em;
+  margin-right: .5em;
+  vertical-align: bottom;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.legend .steps .step .swatch:hover {
+  border-color: #000;
+}
+
+.legend .palette {
+  width: 30px;
+  height: 10em;
+  position: relative;
+  margin: 20px 0;
+}
+
+  .legend .palette .labels,
+  .legend .palette .regions {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .legend .palette .labels .label {
+    position: absolute;
+    left: 100%;
+    margin: -.5em 0 0 5px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1em;
+    color: inherit;
+    /* extra space on the right to cover up other labels */
+    padding: 0 10px 0 5px;
+    border-radius: 0;
+    white-space: nowrap;
+  }
+
+  .legend .palette .labels .label:before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    width: 5px;
+    height: 1px;
+    background: #999;
+    margin-top: -1px;
+  }
+
+  .legend .palette .labels .label:first-child:before,
+  .legend .palette .labels .label.hilite:before {
+    margin-top: 0px;
+  }
+
+  .legend .palette:hover .labels .label {
+    opacity: .6;
+  }
+
+  .legend .palette .labels .label.hilite {
+    opacity: 1;
+    background: rgba(255,255,255,.9);
+  }
+
+  .legend .palette .regions .region {
+    position: "absolute";
+    left: 0;
+    width: "100%";
+  }
+
+  .legend .palette .regions .region:hover {
+    background: rgba(0,0,0,.6);
+  }
+
+@media (max-width: 767px) {
+  .navbar-nav {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  h3 {
+    margin-bottom: 15px;
+  }
+
+  .sidebar {
+    display: block;
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+  }
+
+  .sidebar .row > *:not(:last-child) {
+    padding-right: 0;
+  }
+}

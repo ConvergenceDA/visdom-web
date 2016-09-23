@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Units</title>
+    <script src="../js/vendor/d3.v3.min.js"></script>
+    <script src="../js/vendor/hashable.js"></script>
+    <script src="../js/mda.js"></script>
+    <link rel="stylesheet" href="../css/vendor/qunit-1.14.0.css">
+    <link rel="stylesheet" href="css/common.css">
+    <script src="../js/vendor/qunit-1.14.0.js"></script>
+  </head>
+  <body>
+    <h1>Unit<sup>2</sup> Tests</h1>
+    <div id="qunit"></div>
+  </body>
+  <script>
+
+    test("type aliases work", function() {
+      strictEqual(mda.unit.coerce("thm"), mda.unit.coerce("therm"), "thm === therm");
+      strictEqual(mda.unit.coerce("kw"), mda.unit.coerce("kW"), "kw === kW");
+    });
+
+    test("can convert between units", function() {
+      var THERMS_PER_KWH = 0.034095106405145;
+      equal(mda.unit.convert(1, "kWh", "thm"), THERMS_PER_KWH);
+      equal(mda.unit.convert(1, "thm", "kWh"), 1 / THERMS_PER_KWH);
+    });
+
+    test("should format wattages correctly", function() {
+      var format = mda.unit.wattFormat("d");
+      equal(format(1),          "1 W");
+      equal(format(1000),       "1 kW");
+      equal(format(1000000),    "1 MW");
+      equal(format(1000000000), "1 GW");
+
+      format = mda.unit.wattFormat(".1f");
+      equal(format(21.5),         "21.5 W");
+      equal(format(2140),         "2.1 kW");
+      equal(format(3140010),      "3.1 MW");
+      equal(format(91340010678),  "91.3 GW");
+
+      format = mda.unit.kilowattFormat(".1f");
+      equal(format(21.5),         "21.5 kW");
+      equal(format(2140),         "2.1 MW");
+      equal(format(3140010),      "3.1 GW");
+      equal(format(91340010678),  "91.3 TW");
+    });
+
+    test("should format fixed wattage scales correctly", function() {
+      // kW fixed scale
+      var format = mda.unit.kilowattFormat(",")
+        .scale(1e3);
+      equal(format(.001), "0.001 kW");
+      equal(format(1),    "1 kW");
+      equal(format(2),    "2 kW");
+      equal(format(2000), "2,000 kW");
+    });
+
+    test("should format kWs correctly", function() {
+      // kW fixed scale
+      var kw = mda.unit.coerce("kw");
+      equal(kw.format(1),       "1.0 W");
+      equal(kw.format(1000),    "1.0 kW");
+      equal(kw.format(2000),    "2.0 kW");
+      equal(kw.format(2000000), "2.0 MW");
+
+      equal(kw.formatFixed(1),        "0.001 kW");
+      equal(kw.formatFixed(1000),     "1 kW");
+      equal(kw.formatFixed(2000),     "2 kW");
+      equal(kw.formatFixed(2000000),  "2,000 kW");
+    });
+
+  </script>
+</html>

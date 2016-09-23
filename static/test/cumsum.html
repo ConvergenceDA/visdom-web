@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Cumulative Sum Chart</title>
+    <script src="../js/vendor/d3.v3.min.js"></script>
+    <script src="../js/vendor/hashable.js"></script>
+    <script src="../js/mda.js"></script>
+    <script src="../js/mda.model.js"></script>
+    <script src="../js/mda.render.js"></script>
+    <script src="../js/mda.ui.js"></script>
+    <script src="../js/mda.color.js"></script>
+    <script src="../js/mda.charts.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/cumsum.css">
+    <link rel="stylesheet" href="css/tooltip.css">
+    <style>
+
+      #cumsum {
+        float: left;
+        width: 600px;
+        margin-right: 20px;
+      }
+
+      #percentiles {
+        margin-top: 20px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <h1>Cumulative Sum Chart</h1>
+    <form>
+      <p>
+        <label><var>filter by</var> <input id="filter" name="filter" placeholder="column|expr"></label>
+        <a class="merge" href="#?filter=">&times;</a>
+        <span class="eg">e.g.
+          <a class="merge" href="#?filter=kw_mean|&lt;1">kw_mean|&lt;1</a>,
+          <a class="merge" href="#?filter=zip5|=94403">zip5|=94403</a>
+        </span>
+      </p>
+      <p>
+        <label><var>y</var> <select id="y" name="y" class="columns"></select></label>
+        <label><input id="pct" type="checkbox"> show as percentage</label><br>
+      </p>
+    </form>
+    <div id="cumsum">
+    </div>
+    <div id="appendix">
+      <table id="percentiles"></table>
+      <p>Move your mouse over the chart to inspect ratios at each percentile
+      (along the x-axis) on the curve. Click and drag on the chart or click
+      the links in the table above to &ldquo;pin&rdquo; the cursor to a
+      percentile. The top row in the table indicates the cursor&rsquo;s
+      value; click the &ldquo;&times;&rdquo; link next to the percentile to
+      clear it.</p>
+    </div>
+  </body>
+  <script>
+
+    var api = mda.api(),
+        model = mda.model(),
+        chart = new mda.charts.CumSum("#cumsum", {
+          api: api,
+          model: model,
+          table: d3.select("#appendix table"),
+          positionTable: false
+        }),
+        ycol = d3.select("#y")
+          .on("change", function() {
+            hash.update({y: this.value}).write();
+          }),
+        pct = d3.select("#pct")
+          .on("change", function() {
+            hash.update({pct: this.checked ? 1 : 0}).write();
+          }),
+        filter = d3.select("#filter")
+          .on("change", function() {
+            hash.update({filter: this.value}).write();
+          }),
+        state = chart.getState(),
+        columnSelect = mda.ui.select()
+          .label(function(d) {
+            return d.label
+              ? [d.label, " (", d.value, ")"].join("")
+              : d.value;
+          }),
+        hash = mda.hash()
+          .format(hashable.format("{y}")
+            .query(true))
+          .data(state)
+          .change(function(e) {
+            if (!e.data) return console.warn("no data:", e.url);
+            state = e.data;
+            state.pct = +state.pct;
+            chart.setState(state).update();
+            ycol.call(columnSelect.set, state.y);
+            pct.attr("checked", state.pct ? "checked" : null);
+            filter.attr("value", state.filter);
+          })
+          .enable();
+
+    var form = d3.select("form")
+      .on("submit", function() {
+        d3.event.preventDefault();
+      });
+
+    d3.selectAll("a.merge")
+      .datum(function() {
+        return hashable.qs.parse(this.getAttribute("href").substr(1));
+      })
+      .on("click", function(d) {
+        hash.update(d).write();
+        d3.event.preventDefault();
+      });
+
+    api.getColumnInfo(function(error, columns) {
+      model.columns(columns);
+      columnSelect = model.columnSelect();
+      d3.selectAll("select.columns")
+        .call(columnSelect);
+      hash.check();
+    });
+
+  </script>
+</html>

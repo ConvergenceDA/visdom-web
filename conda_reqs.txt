@@ -1,0 +1,9 @@
+h5py
+numpy
+scipy
+pandas
+numexpr
+Cython
+pytables
+cherrypy
+jinja2

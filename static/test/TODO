@@ -1,0 +1,72 @@
+Cumsum
+- "query?/s/basics/|{field}/cum/thin/{count}"
+- component modes:
+    * compare metrics (all 0-100%)
+    * compare populations
+
+Map
+- "query?/s/basics|{field}/a/{geo}|count"
+- percentile scale
+- double-click to fire a selection event
+
+Scatter
+- "query?/s/basics|{x}&{y}/rnd/{size}"
+- hover behavior (tooltip)
+- comparison with two queries: superset + filtered subset
+- brush / filter behavior
+- zoom in client-side?
+
+Histogram
+- "query?/s/basics|nObs/hist/100" -> columns: ["counts", "bin_min", "bin_max"]
+- "junk" column: *actual* max value, or zero
+- grouped bar chart?
+
+Filters
+- "staging" area for setting up the filter, then submit to add it
+- checkbox next to each allows you to toggle it on/off quickly
+- x button to remove the filter permanently
+- types:
+  * numeric: range (min and/or max), based on column metadata + histogram
+    - min and max text inputs provide precision
+    - |<-- and -->| links push either end to the edge of the domain
+  * categorical: select one (or more) values from a multiple-select input
+    - e.g. climate zones, zip codes
+  * geographic: select one (or more) regions from a map
+    - use categorical first?
+  * date/time: value range, but...
+    - encompasses multiple columns, e.g. "kw.total.{Jan-Dec}" and "HOD.mean.{1-24}"
+- can you change the column after you've added it? (only for columns of same type?)
+- each filter should be a form, to simplify event management (submitting the
+  form triggers a change event if the text has changed)
+
+Load Shapes
+{
+  class: [],
+  member_count: [],
+  energy: [],
+  points: [[], []],
+  total_member_count: <int>,
+  total_energy: <float>
+}
+
+Filtering
+
+[
+  {
+    column: "zip5",
+    crit: "=94110"
+  },
+  {
+    column: "kw.max",
+    crit: "<20"
+  },
+  {
+    op: "or",
+    children: [
+      {
+        column: "climate",
+        crit: "=X"
+      }
+    ]
+  }
+]

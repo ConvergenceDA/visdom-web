@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Filters</title>
+    <script src="../js/vendor/d3.v3.min.js"></script>
+    <script src="../js/vendor/queue.v1.min.js"></script>
+    <script src="../js/vendor/hashable.js"></script>
+    <script src="../js/mda.js"></script>
+    <script src="../js/mda.model.js"></script>
+    <script src="../js/mda.ui.js"></script>
+    <script src="../js/mda.filter.js"></script>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/filters.css">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <h1>Filter List</h1>
+      <div class="row">
+        <div id="controls" class="col-md-6">
+          <p>These are filters that know how to deal with different types of data:
+          numeric, date, or categorical.</p>
+
+          <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label for="source" class="control-label col-xs-3">Data Source</label>
+              <div class="col-xs-9">
+                <select id="source" class="form-control"></select>
+              </div>
+            </div>
+          </form>
+
+          <div id="filters" class="filters">
+            <div class="alert alert-info loading-info">Loading feature metadata...</div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <form id="query">
+            <h4>Filter Expression</h4>
+            <p><input id="output" class="form-control"></p>
+            <p>Click the link below to see the data API query results for this filter.</p>
+            <p><a id="submit" target="_blank" class="btn btn-primary">Query</a></p>
+          </form>
+        </div>
+    </div>
+  </body>
+  <script>
+
+    var state = {
+      source: "basics160k"
+    };
+
+    var output = d3.select("#output"),
+        link = d3.select("#submit")
+          .on("click", function() {
+            var filter = list.getFilter(),
+                url = "/query?" + mda.api.query.format({
+                  source: state.source,
+                  filter: filter
+                });
+            this.href = url;
+            return false;
+          });
+
+    d3.select("#query")
+      .on("submit", function() {
+        d3.event.preventDefault();
+        link.node().click();
+      });
+
+    var sourceSelect = mda.ui.select()
+      .value(mda.identity)
+      .label(mda.identity);
+
+    var source = d3.select("#source")
+      .datum(["basics160k", "basics"])
+      .call(sourceSelect)
+      .call(sourceSelect.set, state.source)
+      .on("change", function() {
+        setDataSource(this.value);
+      });
+
+    var model = new mda.model.Model()
+      .on("change.hash", function() {
+        hash.update({
+          source: model.getDataSource()
+        }).write();
+      });
+
+    var list = new mda.filter.FilterList("#filters", {
+        model: model
+      })
+      .on("change", mda.util.debounce(changeFilter, 200))
+      .on("clear", changeFilter);
+
+    var hash = mda.hash()
+      .default(state)
+      .change(function(e) {
+        state = e.data;
+        // console.log("state:", JSON.stringify(state));
+        if (e.diff) {
+          if (e.diff.source) {
+            model.setDataSource(state.source);
+            source.call(sourceSelect.set, state.source);
+          }
+        }
+
+        list.options.filters = mda.api.query.parseFilter(state.filter);
+        output.attr("value", state.filter);
+      })
+      .enable();
+
+    list.api.get("query/sources", function(error, sources) {
+      sources = d3.entries(sources).map(function(d) {
+        return {
+          name: d.key,
+          label: d.value.label
+        };
+      });
+
+      console.log("data sources:", sources);
+
+      source
+        .datum(sources)
+        .call(sourceSelect
+          .value(function(d) { return d.name; })
+          .label(function(d) { return d.label + " (" + d.name + ")"; }))
+        .call(sourceSelect.set, state.source);
+
+      hash.check();
+
+      var first = Object.keys(sources).shift();
+      console.log("data source:", model.getDataSource());
+      setDataSource(state.source || first, function(error, source) {
+        console.log("set data source:", source);
+        list.updateModel();
+      });
+    });
+
+    function setDataSource(source, callback) {
+      list.clear();
+      var info = list.root.select(".loading-info")
+        .style("display", null);
+      return model.setDataSource(source, function(error) {
+        hash.update({source: source}).write();
+        info.style("display", "none");
+        callback && callback(error);
+      });
+    }
+
+    function changeFilter() {
+      var filter = list.getFilter(),
+          str = mda.api.query.formatFilter(filter);
+      hash.update({filter: str}).write();
+      output.attr("value", state.filter);
+      // list.updateSubsets();
+      // list.updateSentence();
+    }
+
+  </script>
+</html>

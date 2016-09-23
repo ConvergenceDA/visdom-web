@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Histogram</title>
+    <script src="../js/vendor/d3.v3.min.js"></script>
+    <script src="../js/vendor/hashable.js"></script>
+    <script src="../js/mda.js"></script>
+    <script src="../js/mda.model.js"></script>
+    <script src="../js/mda.render.js"></script>
+    <script src="../js/mda.ui.js"></script>
+    <script src="../js/mda.color.js"></script>
+    <script src="../js/mda.charts.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/histogram.css">
+    <link rel="stylesheet" href="css/tooltip.css">
+    <style>
+      #histogram {
+        width: 800px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Histogram</h1>
+    <form>
+      <p>
+        <label><var>filter by</var> <input id="filter" name="filter" placeholder="column|expr"></label>
+        <a class="merge" href="#?filter=">&times;</a>
+        <span class="eg">e.g.
+          <a class="merge" href="#?filter=kw_mean|&lt;1">kw_mean|&lt;1</a>,
+          <a class="merge" href="#?filter=zip5|=94403">zip5|=94403</a>
+        </span>
+      </p>
+      <p>
+        <label><var>x</var> <select id="x" name="x" class="columns"></select></label>
+        <label><var>bins</var> <input id="bins" type="text"></label>
+      </p>
+      <p>
+        <label><input id="cum" type="checkbox" name="cum"> <var>cumulative</var></label><br>
+        <label><input id="area" type="checkbox" name="area"> <var>show area</var></label>
+        <label>&amp; <var>interpolate</var> <select id="interp" name="interp"></select></label>
+      </p>
+    </form>
+    <div id="histogram"></div>
+  </body>
+  <script>
+
+    var histo = new mda.charts.Histogram("#histogram", {
+        }),
+        model = histo.model,
+        api = histo.api,
+        columnSelect = mda.ui.select(),
+        xcol = d3.select("#x")
+          .on("change", function() {
+            hash.update({x: this.value}).write();
+          }),
+        cum = d3.select("#cum")
+          .on("change", function() {
+            hash.update({cum: this.checked ? 1 : 0}).write();
+          }),
+        bins = d3.select("#bins")
+          .on("change", function() {
+            hash.update({bins: this.value}).write();
+          }),
+        filter = d3.select("#filter")
+          .on("change", function() {
+            hash.update({filter: this.value}).write();
+          }),
+        areaCheckbox = d3.select("#area")
+          .on("change", function() {
+            // console.log("change:", this, this.checked, state.area);
+            hash.update({area: this.checked ? 1 : 0}).write();
+          }),
+        interpSelect = mda.ui.select()
+          .value(function(d) { return d; })
+          .label(function(d) { return d; }),
+        interp = d3.select("#interp")
+          .datum(["none", "monotone", "basis", "cardinal"])
+          .call(interpSelect)
+          .on("change", function() {
+            hash.update({interp: this.options[this.selectedIndex].value}).write();
+          }),
+        state = histo.getState(),
+        hash = mda.hash()
+          .format(hashable.format("{x}")
+            .query(true))
+          .data(state)
+          .change(function(e) {
+            if (!e.data) return console.warn("no data:", e.url);
+            state = e.data;
+            state.area = +state.area || 0;
+            state.cum = +state.cum || 0;
+            histo.setState(state).update();
+
+            xcol.call(columnSelect.set, state.x);
+            bins.property("value", state.bins);
+            areaCheckbox.attr("checked", state.area ? "checked" : null);
+            interp.call(interpSelect.set, state.interp);
+            filter.attr("value", state.filter);
+            cum.attr("checked", state.cum ? "checked" : null);
+          })
+          .enable();
+
+    var form = d3.select("form")
+      .on("submit", function() {
+        console.log("submit:", d3.event.target);
+        d3.event.preventDefault();
+      });
+
+    d3.selectAll("a.merge")
+      .datum(function() {
+        return hashable.qs.parse(this.getAttribute("href").substr(1));
+      })
+      .on("click", function(d) {
+        hash.update(d).write();
+        // histo.setState(hash.data()).update();
+        d3.event.preventDefault();
+      });
+
+    api.getColumnInfo(function(error, columns) {
+      // columns.sort(d3.ascending);
+
+      model.columns(columns);
+      columnSelect = model.columnSelect();
+
+      var select = d3.selectAll("select.columns")
+        .call(columnSelect);
+
+      hash.check();
+    });
+
+  </script>
+</html>

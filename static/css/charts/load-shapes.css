@@ -1,0 +1,205 @@
+
+.meta .date {
+  font-size: 11px;
+}
+.meta .hour {
+  font-size: 11px;
+}
+.meta .cust_count {
+  font-size: 11px;
+}
+
+.shape .left {
+  position: relative;
+  min-height: 120px;
+}
+
+.shape .chart {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.shape path.line {
+  fill: none;
+  stroke: red;
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+
+          transition: stroke 500ms linear;
+  -webkit-transition: stroke 500ms linear;
+}
+
+.shape path.response {
+  stroke: #44c;
+}
+
+.loading .shape path.line {
+  stroke: #ccc;
+}
+
+.shape path.line2 {
+  fill: none;
+  stroke: grey;
+  stroke-width: 3px;
+  stroke-dasharray: 2,4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+
+          transition: stroke 500ms linear;
+  -webkit-transition: stroke 500ms linear;
+}
+
+.loading .shape path.line2 {
+  stroke: #ccc;
+}
+
+.shape {
+  border: 1px solid transparent;
+  padding: 10px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.shape:hover {
+  border: 1px solid #ccc;
+}
+
+  .shape .rank {
+    display: block;
+    position: absolute;
+    top: 7px;
+    right: -10px;
+    width: auto;
+    min-width: 1.6em;
+    height: 1.6em;
+    line-height: 1.6em;
+    text-align: center;
+    color: #fff;
+    background: #ccc;
+    border-radius: 1em;
+  }
+
+  .shape:hover .rank {
+    background: black;
+  }
+
+.shape .axis .tick {
+  visibility: hidden;
+}
+
+.shape:hover .axis .tick,
+.shape .axis.over .tick {
+  visibility: visible;
+}
+
+.shape:not(:hover) .axis.over .tick text,
+.shape:not(:hover) .axis.over .tick:not(.over) {
+  visibility: hidden;
+}
+
+.shape .axis text {
+  fill: #aaa;
+  font-size: 10px;
+}
+
+.shape .axis line {
+  stroke: #eee;
+}
+
+.shape .axis path.domain {
+  stroke: #aaa;
+  stroke-opacity: 1;
+  fill: none;
+}
+
+.shape .figure {
+  margin: 0 0 5px 0;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+  .shape .figure .percent {
+    font-weight: bold;
+  }
+
+  .shape .figure .divider {
+    color: #ccc;
+  }
+
+  .shape .figure .total {
+    color: #666;
+  }
+
+.slice .point {
+  fill: transparent;
+  stroke: transparent;
+  stroke-width: 2px;
+}
+
+.slice.over .point {
+  fill: #fff;
+  stroke: red;
+}
+
+.slice.over .response {
+  fill: #fff;
+  stroke: blue;
+}
+
+.load-shapes-legend {
+  position: relative;
+}
+
+.load-shapes-legend h4 {
+  margin-top: 0;
+}
+
+.load-shapes-legend ul.categories,
+.load-shapes-legend ul.categories li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.load-shapes-legend ul.categories li {
+  padding-right: 3em;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.load-shapes-legend ul.categories li .name {
+  margin: 0 0 4px 0;
+}
+
+.load-shapes-legend .bar {
+  background: #ccc;
+  font-size: 11px;
+  height: 1.1em;
+  margin-bottom: 1px;
+  position: relative;
+  clear: both;
+  overflow: visible;
+  white-space: nowrap;
+}
+
+.load-shapes-legend .key {
+  position: absolute;
+  top: 0;
+  right: 5em;
+}
+
+.load-shapes-legend .key .bar {
+  width: 1.1em;
+}
+
+.load-shapes-legend .bar.kwh { background: #369; }
+.load-shapes-legend .bar.members { background: #6c9; }
+
+.load-shapes-legend .bar .value {
+  position: absolute;
+  left: 100%;
+  line-height: 1.1em;
+  margin-left: 2px;
+}

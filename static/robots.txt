@@ -1,0 +1,5 @@
+# robots.txt for Smart Efficiency site
+
+# no spidering for now
+User-agent: *
+Disallow: /

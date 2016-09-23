@@ -1,0 +1,43 @@
+<html>
+<script type="text/javascript" src="/static/js/jquery-1.11.0.js"></script>
+<script type='text/javascript'>
+function Update() {
+    $.ajax({
+      type: 'POST',
+      url: "/query",
+      contentType: "application/json",
+      processData: false,
+      data: $('#updatebox').val(),
+      success: function(data) {alert(data);},
+      dataType: "text"
+    });
+}
+</script>
+<body>
+<textarea id='updatebox' cols='80' rows='30'>
+{
+  "dataSource": {
+    "basics2": [
+      "zip5"
+    ]
+  },
+  "colInfo": null,
+  "colList": null,
+  "filter": null,
+  "filter2": "zip5 in ('94611','93304')",
+  "aggregator": {
+    "zip5": [
+      "count"
+    ]
+  },
+  "histogram": null,
+  "cumsum": null,
+  "rnd": null,
+  "tail": null,
+  "thin": null,  
+  "head": null
+}
+</textarea>
+<input type='submit' value='Update' onClick='Update(); return false' />
+</body>
+</html>

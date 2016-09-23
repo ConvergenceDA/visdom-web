@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Scatter Plot</title>
+    <script src="../js/vendor/d3.v3.min.js"></script>
+    <script src="../js/vendor/hashable.js"></script>
+    <script src="../js/mda.js"></script>
+    <script src="../js/mda.model.js"></script>
+    <script src="../js/mda.render.js"></script>
+    <script src="../js/mda.ui.js"></script>
+    <script src="../js/mda.color.js"></script>
+    <script src="../js/mda.charts.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/scatter.css">
+    <link rel="stylesheet" href="css/tooltip.css">
+    <link rel="stylesheet" href="/static/css/charts/charts.css?blah">
+    <style>
+      #chart {
+        width: 600px;
+        float: left;
+        margin-right: 20px;
+      }
+
+      .legend {
+        display: inline-block;
+      }
+
+      #links a + a:before {
+        content: " / ";
+        display: inline-block;
+        margin: 0 .4em 0 .2em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Scatter Plot</h1>
+    <form>
+      <p>
+        <label><var>filter by</var> <input id="filter" name="filter" placeholder="column|expr"></label>
+        <a class="merge" href="#?filter=">&times;</a>
+        <span class="eg">e.g.
+          <a class="merge" href="#?filter=kw_mean|&lt;1">kw_mean|&lt;1</a>,
+          <a class="merge" href="#?filter=zip5|=94403">zip5|=94403</a>
+        </span>
+      </p>
+      <p>
+        <label><var>x</var> <select id="x" name="x" class="columns"></select></label><br>
+        <label><var>y</var> <select id="y" name="y" class="columns"></select></label>
+      </p>
+      <p>
+        <label><var>color by</var> <select id="color" name="color" class="columns"></select></label><br>
+        <label><var>with scheme</var> <select id="scheme" name="scheme"></select></label>
+      </p>
+    </form>
+
+    <div id="chart"></div>
+
+    <div id="legend"></div>
+
+    <div id="links">
+      <h6>Presets</h6>
+      Compare:
+      <a class="merge" href="#?x=kw_mean_summer&amp;y=kw_mean_winter&amp;">summer vs. winter</a>
+      <a class="merge" href="#?x=min_day_tout&amp;y=max_day_tout&amp;">mean temp. of min vs. max demand days</a><br>
+      Colors:
+      <a class="merge" href="#?color=kw_tout_cor&amp;scheme=divergent">correlate demand w/outside temp.</a>
+      <a class="merge" href="#?color=climate&amp;scheme=category">climate zones</a>
+    </p>
+  </body>
+  <script>
+
+    var api = mda.api(),
+        model = new mda.model.Model(),
+        scatter = new mda.charts.ScatterPlot("#chart", {
+          api: api,
+          model: model,
+          state: {
+            x: "kw_mean_summer",
+            y: "kw_mean_winter",
+            color: "kw_tout_cor",
+            scheme: "divergent",
+            samples: 2000
+          },
+          radius: 4,
+          fill: "black",
+          legend: "#legend"
+        }),
+        xcol = d3.select("#x")
+          .on("change", function() {
+            hash.update({x: this.value}).write();
+          }),
+        ycol = d3.select("#y")
+          .on("change", function() {
+            hash.update({y: this.value}).write();
+          }),
+        columnSelect = mda.ui.select(),
+        colorBy = d3.select("#color")
+          .on("change", function() {
+            hash.update({color: this.value}).write();
+          }),
+        schemes = d3.entries(scatter.colorSchemes)
+          .map(function(d) {
+            var scheme = d.value;
+            return {
+              value: d.key,
+              scheme: scheme,
+              label: scheme.options.label || d.key
+            };
+          }),
+        schemeSelect = mda.ui.select()
+          .value(function(d) { return d.value; })
+          .label(function(d) { return d.label; }),
+        scheme = d3.select("#scheme")
+          .datum(schemes)
+          .call(schemeSelect)
+          .on("change", function() {
+            hash.update({scheme: this.value}).write();
+          }),
+        filter = d3.select("#filter")
+          .on("change", function() {
+            hash.update({filter: this.value}).write();
+          }),
+        state = scatter.getState(),
+        hash = mda.hash()
+          .format(hashable.format("{x}/{y}").query(true))
+          .default(state)
+          .change(function(e) {
+            if (!e.data) return console.warn("no data:", e.url);
+            state = e.data;
+            scatter.setState(state).update();
+            xcol.call(columnSelect.set, state.x);
+            ycol.call(columnSelect.set, state.y);
+            colorBy.call(columnSelect.set, state.color);
+            scheme.call(schemeSelect.set, state.scheme);
+            filter.attr("value", state.filter);
+          })
+          .enable();
+
+    var form = d3.select("form")
+      .on("submit", function() {
+        console.log("submit:", d3.event.target);
+        d3.event.preventDefault();
+      });
+
+    d3.selectAll("a.merge")
+      .datum(function() {
+        return hashable.qs.parse(this.getAttribute("href").substr(1));
+      })
+      .on("click", function(d) {
+        hash.update(d).write();
+        d3.event.preventDefault();
+      });
+
+    scheme.selectAll("option")
+      .text(function(d) { return d.label; });
+
+    api.getColumnInfo(function(error, columns) {
+      // columns.sort(d3.ascending);
+
+      model.columns(columns);
+      columnSelect = model.columnSelect();
+
+      var select = d3.selectAll("select.columns")
+        .call(columnSelect);
+
+      hash.check();
+    });
+
+  </script>
+</html>

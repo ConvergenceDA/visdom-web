@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="../js/vendor/d3.v3.min.js"></script>
+    <script src="../js/mda.js"></script>
+    <style>
+      pre {
+        background: #f9f9f9;
+        border: 1px solid #ccc;
+        padding: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>API playground</h1>
+
+    <p>Open your dev tools on this page and you can play with the JavaScript
+    API. Check out <a href="https://bitbucket.org/sssllab/analytics_website/wiki/Data%20API">the wiki</a>
+    for more info on query URLs, or start with these examples:</p>
+
+    <pre>api.get("query?/s/basics|kw.mean&amp;therm.mean/f/zip5|=93304", function(err, data) {
+  console.log(data);
+});</pre>
+
+    <pre>api.query({
+  columns: ["kw.mean", "therm.mean"],
+  filter: {
+    zip5: "=93304"
+  }
+}, function(err, data) {
+  console.log(data);
+});</pre>
+
+    <pre>api.query({
+  columns: ["kw.mean", "therm.mean"],
+  agg: {
+    zip5: "mean"
+  },
+  cum: true
+}, function(err, data) {
+  console.log(data);
+});</pre>
+
+    <script>
+      var api = mda.api();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,172 @@
+{% extends "bootstrap.html" %}
+
+{% block title %}Charts{% endblock %}
+
+{% set body_class = "has-sidebar" %}
+{% set fluid = True %}
+
+{% block head %}
+  <link rel="stylesheet" href="/static/css/vendor/leaflet.css">
+  <link rel="stylesheet" href="/static/css/charts/filters.css">
+  <link rel="stylesheet" href="/static/css/charts/cumsum.css">
+  <link rel="stylesheet" href="/static/css/charts/charts.css">
+  <link rel="stylesheet" href="/static/css/charts/scatter.css">
+  <link rel="stylesheet" href="/static/css/charts/histogram.css">
+  <link rel="stylesheet" href="/static/css/charts/sorted-values.css">
+  <link rel="stylesheet" href="/static/css/charts/tabular.css">
+  <link rel="stylesheet" href="/static/css/charts/load-shapes.css">
+  <link rel="stylesheet" href="/static/css/charts/map.css">
+  <link rel="stylesheet" href="/static/css/charts/tooltip.css">
+  <script src="/static/js/vendor/d3.v3.min.js"></script>
+  <script src="/static/js/vendor/hashable.js"></script>
+  <script src="/static/js/vendor/topojson.v1.min.js"></script>
+  <script src="/static/js/vendor/queue.v1.min.js"></script>
+  <script src="/static/js/vendor/leaflet.js"></script>
+  <script src="/static/js/mda.js"></script>
+  <script src="/static/js/mda.ui.js"></script>
+  <script src="/static/js/mda.render.js"></script>
+  <script src="/static/js/mda.color.js"></script>
+  <script src="/static/js/mda.model.js"></script>
+  <script src="/static/js/mda.filter.js"></script>
+  <script src="/static/js/mda.storage.js"></script>
+  <script src="/static/js/mda.charts.js"></script>
+  <script src="/static/js/mda.app.js"></script>
+{% endblock %}
+
+{% block nav_links %}
+  <li class="active"><a href="/charts">Charts</a></li>
+{% endblock %}
+
+
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+
+      <main class="col-sm-8 col-sm-push-4">
+
+        <h3><span class="glyphicon glyphicon-stats"></span> <span>Charts</span></h3>
+
+        <ul id="chart-types" class="nav nav-pills">
+        </ul>
+
+        <div id="content">
+          <div id="charts" class="tab-content">
+          </div>
+        </div>
+
+      </main>
+
+      <div class="sidebar col-sm-4">
+        <section id="config">
+          <!-- <h3><span class="glyphicon glyphicon-wrench"></span> <span>Configuration</span></h3> -->
+          <div class="config" role="form">
+            <div class="form-group">
+              <h3 class="control-label"><label for="input-data-source">Customer Filters</label></h3>
+              <select id="input-data-source" class="form-control">
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section id="filters" class="filters">
+          <div class="row">
+            <div class="col-xs-3">
+              <h3><span class="glyphicon glyphicon-filter"></span> <span>Filters</span></h3>
+            </div>
+            <div class="col-xs-5">
+              <select id="select-filter-preset" class="form-control input-sm">
+              </select>
+            </div>
+            <div class="col-xs-2">
+              <button id="save-filter-preset" class="btn btn-default btn-sm btn-block" title="Save this filter as a preset">Save</button>
+            </div>
+            <div class="col-xs-2">
+              <button id="remove-filter-preset" class="btn btn-default btn-sm btn-block" title="Delete this filter">&times;</button>
+            </div>
+          </div>
+          <div class="filter-preset" role="form">
+            <div class="form-group">
+              <div id="filter-presets" class="row">
+              </div>
+            </div>
+          </div>
+          <div id="filter-list"></div>
+        </section>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+
+var urlStore = new mda.storage.URLStore({
+  selector: "#select-url-preset",
+  saveButton: "#save-url-preset",
+  removeButton: "#remove-url-preset"
+})
+.restore()
+.on("select", function onUrlSelect(preset) {
+  location.hash = preset.url;
+  app.hash.check();
+});
+
+window.addEventListener("hashchange", function() {
+  urlStore.setCurrent({url: location.hash});
+});
+
+var app = (function() {
+  var types = mda.app.MultiChartApp.types;
+  return new mda.app.MultiChartApp("body", {
+    // selector of the filter list element
+    filters:          "#filter-list",
+    // selector of the data source input
+    dataSourceInput:  "#input-data-source",
+    // selector of the chart types list (<ol> or <ul>)
+    chartTypes:       "#chart-types",
+
+    // selector of the chart container, where a <div> will be created for each
+    // chart. These will be classed "tab-pane" for use in Bootstrap layouts.
+    chartRoots:       "#charts",
+
+    // pass in the FilterStore directly so that events can be coordinated
+    // between it and the FilterList
+    filterStore: new mda.storage.FilterStore({
+      selector: "#select-filter-preset",
+      saveButton: "#save-filter-preset",
+      removeButton: "#remove-filter-preset"
+    }),
+
+    // the list of chart type definitions
+    // these 
+    charts: [
+
+      mda.util.extend({}, types.MAP, {
+        dataPath: "/static/",
+        create: function(root, options) {
+          var map = types.MAP.create(root, options); 
+          queue()
+            .defer(map.loadZctaLookup.bind(map), this.dataPath + "zipToZcta.json")
+            .defer(map.loadFeatures.bind(map), this.dataPath + "CA_smaller.geojson")
+            .await(function(error) {
+              if (error) return alert("Unable to load map data: " + error);
+              map.update();
+            });
+          return map;
+        }
+      }),
+      // definitions from mda.apps.js
+      types.HISTOGRAM,
+      types.SCATTER_PLOT,
+      types.CUMULATIVE_SUM,
+      types.SORTED_VALUES,
+      types.LOAD_SHAPES,
+      types.RESPONSE,
+      types.TABULAR_VALUES
+    ]
+
+  })
+  .start();
+})();
+
+  </script>
+{% endblock %}

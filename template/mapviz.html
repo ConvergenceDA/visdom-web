@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% block title %}: Home{% endblock %}
+{% block head %}{{ super() }}
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="/static/js/map_overlay.js"></script>
+    <script type='text/javascript'>
+      var map;
+      var zipToZCTA;
+      var colNames;
+      var colormaps = Object.keys(colors);
+      var zctaToFeature = {};
+
+      function updateMapData(col,colormap) {
+        // /query?/s/basics|therm.mean/a/zip5|mean
+        $.getJSON( "/basics?col=" + col, function( data ) {
+          renderZips(data,map,colormap);
+        });
+      }
+
+      function updateMapEvent() {
+        if ($('#colName').val() != '' && $('#colormap').val() != '')
+        {
+          updateMap($('#colName').val(),$('#colormap').val())
+        }
+      }
+      
+      function fillSelectOptions(id,list) {
+        var optionsStr = "<option value=''>Select</option>";
+        for(var i = 0; i < list.length; i++) {
+            optionsStr += "<option value='" + list[i] + "'>" + list[i] + "</option>";
+        }
+        //alert(optionsStr);
+        $( id ).append( optionsStr );
+      }
+
+      function initialize() {
+        
+        fillSelectOptions('#colormap',colormaps);
+
+        // initialize zip to ZCTA mapping
+        $.getJSON('static/zipToZcta.json', function(data) {
+          zipToZcta = data;
+        }).fail(function() {
+          console.log( "error" );
+        });
+        $.getJSON('basics?colNames', function(data) {
+          fillSelectOptions('#colName',data);
+        });
+        var map_canvas = document.getElementById('map_canvas');
+        var map_options = {
+          center: new google.maps.LatLng(38.0, -121.0),
+          //center: new google.maps.LatLng(-19.257753, 146.823688),
+          zoom: 6,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        map = new google.maps.Map(map_canvas, map_options);
+        map.data.loadGeoJson('/static/CA_smaller.geojson');
+        map.data.setStyle({
+          fillColor: 'black',
+          strokeWeight : 0.2,
+          strokeOpacity : 0.5,
+          fillOpacity : 0.3,
+        }); 
+
+        map.data.addListener('mouseover', function(event) {
+          map.data.overrideStyle(event.feature,{ strokeWeight : 1.0 } );
+          summary = 'Zip: ' + event.feature.getProperty('ZCTA');
+          if(event.feature.summaryValue) { summary = summary + '<br/>Value:' + 
+            event.feature.summaryValue }
+          document.getElementById('info-box-txt').innerHTML = summary;
+
+        });
+        map.data.addListener('mouseout', function(event) {
+          map.data.overrideStyle(event.feature,{ strokeWeight : 0.2 } );
+        });
+
+      }
+
+      function updateMap(featureName,colormap) {
+        var n = 0;
+        if (! map.data.zctaToFeature) {
+          map.data.zctaToFeature = {};
+          //alert('Initializing zctaToFeature');
+          map.data.forEach(function(feature) {
+            map.data.zctaToFeature[feature.getProperty('ZCTA')] = feature;
+          });
+        }
+        updateMapData(featureName,colormap);
+      }
+
+      google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+    <style type="text/css">
+    #info-box {
+      background-color: white;
+      border: 1px solid black;
+      bottom: 100px;
+      height: 40px;
+      width:  70px;
+      padding: 3px;
+      font-size: 12px;
+      line-height: 14px;
+      position: relative;
+      left: 10px;
+    }
+
+
+    /* 'widths' sub menu */
+#layoutdims {
+	clear:both;
+	background:#eee;
+	border-top:4px solid #000;
+	margin:0;
+	padding:6px 50px !important;
+	text-align:right;
+}
+/* column container */
+.colmask {
+	position:relative;	/* This fixes the IE7 overflow hidden bug */
+	clear:both;
+	float:left;
+	width:100%;			/* width of whole page */
+	overflow:hidden;		/* This chops off any overhanging divs */
+}
+/* common column settings */
+.colright,
+.colmid,
+.colleft {
+	float:left;
+	width:100%;
+	position:relative;
+}
+.col1,
+.col2,
+.col3 {
+	float:left;
+	position:relative;
+	padding:0 0 1em 0;
+	overflow:hidden;
+}
+/* 2 Column (left menu) settings */
+.leftmenu {
+	background:#fff;		/* right column background colour */
+}
+.leftmenu .colleft {
+	right:75%;			/* right column width */
+	background:#f4f4f4;	/* left column background colour */
+}
+
+.leftmenu .col1 {
+	width:21%;			/* left column content width (column width minus left and right padding) */
+	left:6%;			/* (right column left and right padding) plus (left column left padding) */
+}
+.leftmenu .col2 {
+	width:71%;			/* right column content width */
+	left:102%;			/* 100% plus left column left padding */
+}
+    </style>
+{% endblock %} {# note that the head looks for the title variable. #}
+{% block content %}    
+    <div class='content'>
+      <h1>Welcome to the energy analytics visualiation tool.</h1>
+      <div class='space_20'></div>
+	  This tools provides a quick and easy way to get deeper insight into energy use. It visualizes the outputs of energy data analytics. 
+    <div class='space_20'></div>
+  </div>
+
+  <div class="colmask leftmenu">
+	<div class="colleft">
+		<div class="col2">
+      <p><strong>Data visualization: Map</strong></p>
+			<!-- Column 2 start -->
+      Color palette&nbsp;&nbsp;&nbsp;<select id='colormap' name='colormap' onChange='javascript:updateMapEvent()'></select>
+      <div id="map_canvas"></div>
+      <div id="info-box"><strong>Zip info</strong><br/><span id='info-box-txt'>Zip: ?<br/>Value: ?</span></div>
+			<!-- Column 2 end -->
+		</div>
+		<div class="col1">
+			<!-- Column 1 start -->
+      <strong>Filter:</strong><br />
+      <br /><br />
+      <strong>Feature name:</strong><br />
+      <select id='colName' name='colName' onChange='javascript:updateMapEvent()' style='width:170px'> </select>
+      <br />
+      <br />
+      <strong>Hard link:</strong><br />
+      <a href="javascript:updateMap('count','reds')">count (reds)</a>
+			<!-- Column 1 end -->
+		</div>
+	</div>
+  
+</div>
+
+<div class='space_20'></div>
+
+{% endblock content %}
+

@@ -1,0 +1,29 @@
+/*
+ * Don't use the desaturation effect in the tabular-values chart.
+ */
+#tabular-values .chart {
+          transition: none;
+  -webkit-transition: none;
+     -moz-transition: none;
+  -webkit-filter: none;
+     -moz-filter: none;
+}
+
+.tabular-values {
+  border-collapse: collapse;
+}
+
+.tabular-values td, .tabular-values th {
+  font-size: 10pt;
+  text-align: left;
+  border: 1px solid #dddddd;
+  padding: 3px 7px 2px 7px;
+}
+
+.tabular-values th {
+  background-color: #aaaaaa;
+}
+
+.tabular-values tr.even {
+  background-color: #eeeeee;
+}

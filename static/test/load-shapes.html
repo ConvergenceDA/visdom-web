@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Load Shapes</title>
+    <script src="../js/vendor/d3.v3.min.js"></script>
+    <script src="../js/vendor/queue.v1.min.js"></script>
+    <script src="../js/vendor/hashable.js"></script>
+    <script src="../js/mda.js"></script>
+    <script src="../js/mda.render.js"></script>
+    <script src="../js/mda.model.js"></script>
+    <script src="../js/mda.ui.js"></script>
+    <script src="../js/mda.filter.js"></script>
+    <script src="../js/mda.color.js"></script>
+    <script src="../js/mda.charts.js"></script>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/filters.css">
+    <link rel="stylesheet" href="css/load-shapes.css">
+    <style>
+
+      input[type=text].form-control {
+        width: auto;
+        display: inline;
+        margin-right: 5px;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <h1>Load Shapes</h1>
+
+      <div class="row">
+        <div id="controls" class="col-md-4">
+          <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label for="sort" class="col-sm-3 control-label">sort by</label>
+              <div class="col-sm-9">
+                <select id="sort" name="sort" class="form-control">
+                  <option value="kwh">kWh</option>
+                  <option value="members">member count</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sort" class="col-sm-3 control-label">show</label>
+              <div class="col-sm-9">
+                <input id="count" name="count" type="text" size="2" class="form-control"> shapes
+              </div>
+            </div>
+          </form>
+
+          <div id="filters" class="filters">
+            <h2>Filters</h2>
+            <div class="alert alert-info loading-info">Loading feature metadata...</div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div id="legend"></div>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-md-8">
+          <div id="load-shapes"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+
+    var api = mda.api()
+          .dataSource("basics160k"),
+        model = new mda.model.Model({ 
+          api: api
+        }),
+        loadShapes = new mda.charts.LoadShapes("#load-shapes", {
+          api: api,
+          model: model,
+          legend: "#legend"
+        }),
+        count = d3.select("#count")
+          .on("change", function() {
+            hash.update({count: this.value}).write();
+          }),
+        sort = d3.select("#sort")
+          .on("change", function() {
+            hash.update({sort: this.value}).write();
+          }),
+        state = loadShapes.getState();
+
+    var list = new mda.filter.FilterList("#filters", {
+        model: model,
+      });
+
+    var hash = mda.hash()
+      .data(state)
+      .change(function(e) {
+        if (!e.data) return console.warn("no data:", e.url);
+        state = e.data;
+        sort.property("value", state.sort);
+        count.attr("value", state.count);
+        if (!list.loading) loadShapes.update();
+      })
+      .enable()
+      .check();
+
+    var info = list.root.select(".loading-info")
+      .style("display", null);
+
+    model.load(function() {
+      info.style("display", "none");
+      if (state.filter) {
+        var filters = mda.api.query.parseFilter(state.filter);
+        list.setFilters(filters);
+      }
+      list.on("change", onFilterChange);
+    });
+
+    d3.select("form")
+      .on("submit", function() {
+        d3.event.preventDefault();
+      });
+
+    var deferredUpdate = mda.util.debounce(loadShapes.update.bind(loadShapes), 200);
+
+    function onFilterChange() {
+      var filter = list.getFilter(),
+          str = mda.api.query.formatFilter(filter);
+      hash.update({filter: str}).write();
+      loadShapes.setState({filter: str});
+      loadShapes.root.classed("loading", true);
+      deferredUpdate();
+      list.updateSubsets();
+      list.updateSentence();
+    }
+
+  </script>
+</html>

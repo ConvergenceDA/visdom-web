@@ -1,0 +1,53 @@
+.mda-tooltip {
+  position: absolute;
+  pointer-events: none;
+}
+
+.mda-tooltip .content {
+  padding: 2px 5px;
+  background: rgba(255,255,255,.9);
+  border: 2px solid black;
+  border-radius: 5px;
+  white-space: pre;
+  max-width: 20em;
+  overflow: hidden;
+}
+
+.mda-tooltip:after {
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: transparent;
+  border-width: 6px;
+}
+
+.mda-tooltip.bottom:after {
+  left: 50%;
+  bottom: 100%;
+  border-bottom-color: black;
+  margin-left: -6px;
+}
+
+.mda-tooltip.top:after {
+  left: 50%;
+  top: 100%;
+  border-top-color: black;
+  margin-left: -6px;
+}
+
+.mda-tooltip.right:after {
+  right: 100%;
+  top: 50%;
+  border-right-color: black;
+  margin-top: -6px;
+}
+
+.mda-tooltip.left:after {
+  left: 100%;
+  top: 50%;
+  border-left-color: black;
+  margin-top: -6px;
+}

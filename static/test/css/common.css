@@ -1,0 +1,112 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.3em;
+  padding: 40px;
+  margin: 0;
+}
+
+h1 {
+  margin: 0 0 20px 0;
+}
+
+h6 {
+  font-size: inherit;
+  font-weight: bold;
+  line-height: inherit;
+  margin: 0;
+}
+
+var, .var {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+}
+
+code {
+  background: #eee;
+  padding: 2px 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+form {
+  margin: 0 0 1em 0;
+}
+
+svg {
+  user-select: none;
+}
+
+path.series {
+  fill: none;
+  stroke: red;
+  stroke-width: 2;
+}
+
+line.rule {
+  stroke: #000;
+  stroke-width: 1;
+}
+
+line.rule {
+  stroke-dasharray: 3, 4;
+}
+
+path.reference {
+  stroke: #000;
+}
+
+.cursor circle.value {
+  fill: red;
+}
+
+.cursor circle.reference {
+  fill: #000;
+}
+
+.cursor path.bracket {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1;
+}
+
+.cursor .y-delta {
+  fill: red;
+  font-size: 12px;
+}
+
+.cursor .y-rule.value {
+  stroke: red;
+}
+
+.axis text {
+  font-size: 10px;
+}
+
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 1;
+  stroke-linecap: square;
+}
+
+.axis path.domain {
+  stroke: #000;
+}
+
+.axis text.label {
+  font-size: 12px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  color: #999;
+}
+
+.cumsum rect.region {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+.cumsum rect.region:hover {
+  /* fill: rgba(0,0,0,.01); */
+}

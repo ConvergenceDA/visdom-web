@@ -1,0 +1,19 @@
+/* anything here? */
+.scatter circle {
+  fill-opacity: .9;
+}
+
+.scatter .point.hilite {
+  stroke: rgba(0,0,0,.6);
+  stroke-width: 1;
+}
+
+.scatter .point:hover {
+  stroke: black;
+  stroke-width: 1;
+}
+
+.scatter svg,
+svg.scatter {
+  vector-effect: non-scaling-stroke;
+}

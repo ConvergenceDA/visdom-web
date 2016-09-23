@@ -1,0 +1,136 @@
+section.filters {
+  max-width: 600px;
+}
+
+section.filters .filters,
+section.filters .lead {
+  margin: 0;
+}
+
+.filters .panel {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-top: none;
+  border-radius: 0;
+}
+
+.filters .filter {
+  margin: 15px 0;
+}
+
+.filters .stage .filter,
+.filters li.filter:last-child {
+  margin-bottom: 0;
+}
+
+.filters .heading {
+  margin: 0 -15px;
+}
+
+  .filters .filter .heading label {
+    max-width: 80%;
+  }
+
+.filters .filter {
+  position: relative;
+  min-height: 2em;
+}
+
+.filters .filter:after {
+  content: "Loading";
+  display: inline-block;
+  color: #999;
+  background: rgba(0,0,0,.01);
+  padding: 5px;
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
+
+  -webkit-transition: opacity .2s;
+  opacity: 0;
+}
+
+.filters .filter.loading:after {
+  opacity: 1;
+}
+
+.filters .disabled .title,
+.filters .disabled input,
+.filters .disabled select,
+.filters .disabled svg {
+  opacity: .5;
+}
+
+.filters.loading .stage {
+  display: none;
+}
+
+.filters .stage.empty .body {
+  display: none;
+}
+
+.filter svg {
+  display: block;
+  width: 100%;
+  height: 110px; /* note: 20% of width */
+  margin: 0;
+}
+
+.filter a.snap {
+  font-weight: bold;
+  margin: 0 5px 0 0;
+}
+
+.filter .form-control {
+  width: auto;
+  display: inline;
+}
+
+.filter .input.max {
+  text-align: right;
+}
+
+.filter a.snap {
+  background: #ccc;
+  border: none;
+}
+
+  .filter .input.max a.snap {
+    margin-left: 5px;
+    margin-right: 0;
+  }
+
+.filters .close {
+  color: red !important;
+}
+
+select.column + input {
+  margin-left: 1em;
+}
+
+svg.range g.brush rect {
+  fill-opacity: .1;
+}
+
+svg.range path {
+  fill: #5cb85c;
+}
+
+svg.range path.superset {
+  fill: #ccc;
+}
+
+.filters form.tab-advanced p input {
+  margin-right: 10px;
+}
+
+.filters form.tab-advanced p:last-child {
+  margin-bottom: 0;
+}
+
+.filters textarea.advanced {
+  height: auto;
+  min-height: 8em;
+  margin-bottom: 15px;
+}

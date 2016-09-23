@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Map</title>
+    <meta charset="utf-8">
+    <script src="../js/vendor/d3.v3.min.js"></script>
+    <script src="../js/vendor/topojson.v1.min.js"></script>
+    <script src="../js/vendor/queue.v1.min.js"></script>
+    <script src="../js/vendor/leaflet.js"></script>
+    <script src="../js/vendor/hashable.js"></script>
+    <script src="../js/colorbrewer.js"></script>
+    <script src="../js/mda.js"></script>
+    <script src="../js/mda.model.js"></script>
+    <script src="../js/mda.ui.js"></script>
+    <script src="../js/mda.render.js"></script>
+    <script src="../js/mda.color.js"></script>
+    <script src="../js/mda.charts.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="../css/vendor/leaflet.css">
+    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/tooltip.css">
+    <link rel="stylesheet" href="../css/charts/charts.css">
+    <style>
+      #map .leaflet-container {
+        width: 600px;
+        float: left;
+        margin-right: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Map</h1>
+    <form>
+      <p>
+        <label><var>filter by</var> <input id="filter" name="filter" placeholder="column|expr"></label>
+        <a class="merge" href="#?filter=">&times;</a>
+        <span class="eg">e.g.
+          <a class="merge" href="#?filter=kw_mean|&lt;1">kw_mean|&lt;1</a>,
+          <a class="merge" href="#?filter=climate|=X">climate|=X</a>
+        </span>
+      </p>
+      <p>
+        <label><var>color by</var> <select id="column" name="column"></select></label>
+        <label><var>aggregate</var> <select id="agg" name="agg"></select></label><br>
+        <label><var>color scheme</var> <select id="color" name="color"></select></label>
+        <label><var>steps</var> <select id="steps" name="steps"></select></label>
+      </p>
+    </form>
+    <div id="map">
+    </div>
+  </body>
+  <script>
+
+    var map = new mda.charts.Map("#map", {
+            api: api,
+            model: model,
+            state: {
+              column: "kw_mean",
+              agg: "mean",
+              color: "GnBu",
+              steps: 7
+            },
+            width: 600,
+            height: 600
+          }),
+        api = map.api,
+        model = map.model,
+        state = map.getState();
+
+    map.on("hashchange", function(e) {
+      if (!e.data) return console.warn("unable to parse hash data:", e.url);
+      // console.log("state:", e.data);
+      map.setState(state = e.data).update();
+
+      colorSelect.call(columnSelect.set, state.color);
+      colorSteps.call(stepSelect.set, state.steps);
+      columnInput.call(columnSelect.set, state.column);
+      filter
+        .property("value", state.filter)
+        .attr("value", state.filter);
+      agg.call(aggSelect.set, state.agg);
+    });
+
+    var center = map.getCenter(),
+        zoom = map.getZoom(),
+        hash = L.hash()
+          .data(state)
+          .update({
+            x: center.lng,
+            y: center.lat,
+            z: zoom
+          })
+          .addTo(map);
+
+    var aggSelect = mda.ui.select()
+          .label(function(d) { return d; })
+          .value(function(d) { return d; }),
+        agg = d3.select("#agg")
+          .datum(["mean", "count", "sum"])
+          .call(aggSelect)
+          .on("change", function() {
+            hash.update({agg: this.value}).write();
+          }),
+        filter = d3.select("#filter")
+          .on("change", function() {
+            hash.update({filter: this.value}).write();
+          }),
+        columnSelect = mda.ui.select()
+          .label(function(d) {
+            return d.label
+              ? [d.label, " (", d.value, ")"].join("")
+              : d.value;
+          }),
+        columnInput = d3.select("#column")
+          .on("change", function() {
+            hash.update({column: this.value}).write();
+          }),
+        colorSelect = d3.select("#color")
+          .datum(colorbrewer)
+          .call(mda.ui.select()
+            .label(function(d) { return d.value; }))
+          .on("change", function() {
+            var val = this.options[this.selectedIndex].value;
+            hash.update({color: val}).write();
+          }),
+        stepSelect = mda.ui.select()
+          .value(function(d) { return d; })
+          .label(function(d) { return d; }),
+        colorSteps = d3.select("#steps")
+          .datum([3, 4, 5, 6, 7, 8, 9])
+          .call(stepSelect)
+          .on("change", function() {
+            var val = this.options[this.selectedIndex].value;
+            hash.update({steps: val}).write();
+          });
+
+    var form = d3.select("form")
+      .on("submit", function() {
+        d3.event.preventDefault();
+        // console.log("filter value:", filter.node().value);
+        hash.update({
+          filter: filter.property("value")
+        }).write();
+      });
+
+    d3.selectAll("a.merge")
+      .datum(function() {
+        return hashable.qs.parse(this.getAttribute("href").substr(1));
+      })
+      .on("click", function(d) {
+        map.setState(d).update();
+        hash.update(d).write();
+        d3.event.preventDefault();
+      });
+
+    queue()
+      .defer(model.load.bind(model))
+      .defer(map.loadZctaLookup.bind(map), "../ziptoZcta.json")
+      .defer(map.loadFeatures.bind(map), "../CA_smaller.geojson")
+      .await(function(error, columns) {
+        if (error) return alert("Whoops!");
+
+        console.log("hello?", columns);
+
+        columnSelect = model.columnSelect();
+
+        columnInput
+          .call(columnSelect)
+          .call(columnSelect.set, state.column);
+
+        hash.check();
+
+        map.update();
+      });
+
+  </script>
+</html>

@@ -1,0 +1,59 @@
+{% if fluid is none %}
+  {% set fluid = False %}
+{% endif %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Visdom | {% block title %}Home{% endblock %}</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/test/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/test/bootstrap/css/bootstrap-theme.css">
+    <!--
+    <script src="/static/js/vendor/jquery.min.js"></script>
+    <script src="/static/test/bootstrap/js/bootstrap.min.js"></script>
+    -->
+    {% block head -%}
+    <!-- no head override -->
+    {% endblock %}
+  </head>
+  <body id="{{ body_id|default('none') }}" class="{{ body_class }}">
+    <header>
+      <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+        <div class="container{% if fluid %}-fluid{% endif %}">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/">VISDOM</a>
+          </div>
+          <ul class="nav navbar-nav">
+          {% block nav_links %}
+          <li><a href="/charts">Charts</a></li>
+          {% endblock %}
+          </ul>
+          {% block nav_extra %}
+            <form id="url-presets" class="navbar-form navbar-left">
+              <div class="form-group">
+                <select id="select-url-preset" class="input-sm form-control">
+                </select>
+                <button id="save-url-preset" class="btn btn-default btn-sm" title="Save this URL as a preset">Save</button>
+                <button id="remove-url-preset" class="btn btn-default btn-sm" title="Delete this URL preset">&times;</button>
+              </div>
+            </form>
+          {% endblock %}
+        </div>
+      </nav>
+    </header>
+    {% block content %}
+    {% endblock %}
+    {% block footer %}
+    <footer>
+    <!--div class='footer' style=' padding-left:20px;
+                                padding-right:20px;
+                                padding-bottom:10px;
+                                padding-top:10px;
+                                position:absolute; bottom:0;
+                                '>
+      <a href='/'>Home</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href='/jsdoc'>Developers</a>&nbsp;&nbsp;|&nbsp;&nbsp;&copy;&nbsp;2014 Stanford Sustainable Systems Lab
+    </div-->
+    </footer>
+    {% endblock %}
+  </body>
+</html>

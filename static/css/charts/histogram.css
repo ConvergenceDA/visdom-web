@@ -1,0 +1,56 @@
+.histogram g.slice {
+  cursor: pointer;
+}
+
+.histogram g.slice .bar {
+  fill: #999;
+}
+
+.histogram g.slice:hover .bar {
+  fill: #666;
+}
+
+.histogram path.area {
+  fill: green;
+  fill-opacity: .2;
+  stroke: black;
+  stroke-weight: 1;
+  stroke-opacity: .8;
+}
+
+.histogram .tooltip {
+  /* override Bootstrap's .tooltip stuff */
+  position: relative;
+  opacity: 1;
+  shape-rendering: crispEdges;
+}
+
+.histogram .tooltip[visibility=hidden] {
+  visibility: hidden;
+}
+
+.tooltip .bg {
+  fill: #fff;
+  fill-opacity: .8;
+}
+
+.tooltip rect.bg {
+  stroke: #000;
+  stroke-width: 1;
+  stroke-opacity: .5;
+}
+
+.tooltip path.bg {
+  fill: #000;
+}
+
+.tooltip text {
+  fill: #000;
+}
+
+tspan.min,
+tspan.max,
+tspan.count {
+  font-weight: bold;
+}
+

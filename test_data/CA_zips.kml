@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<NetworkLink>
+<name><![CDATA[CA Zip Code KML]]></name>
+<Link>
+<href>
+https://www.google.com/fusiontables/exporttable?query=select+col10+from+1lLm4NeW8qtaO1UYpIgopccaJ_tdOMpsHlquX8g&amp;o=kmllink&amp;g=col10</href>
+</Link>
+</NetworkLink>
+</kml>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Forms</title>
+    <meta charset="utf-8">
+    <script src="/static/js/vendor/d3.v3.min.js"></script>
+    <script src="/static/js/vendor/hashable.js"></script>
+    <script src="../js/mda.js"></script>
+    <script src="../js/mda.ui.js"></script>
+    <link rel="stylesheet" href="/static/test/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/test/bootstrap/css/bootstrap-theme.css">
+    <!-- no head override -->
+  </head>
+  <body>
+    <div class="container">
+      <form id="form1"></form>
+      <form id="form2"></form>
+    </div>
+  </body>
+  <script>
+    var form1 = new mda.ui.Form("#form1", {
+      values: {
+        x: "bar",
+        good: true,
+        color: "green",
+        test: 1234
+      },
+      fields: [
+        {
+          name: "x",
+          type: "select",
+          title: "Column",
+          options: [
+            {value: "foo", label: "Foo"},
+            {value: "bar", label: "Bar"}
+          ],
+          value: function(d) { return d.value; },
+          label: function(d) { return d.label; }
+        },
+        {
+          name: "good",
+          type: "checkbox",
+          title: "Is Good"
+        },
+        {
+          name: "color",
+          type: "radio",
+          value: "red",
+          title: "Red"
+        },
+        {
+          name: "color",
+          type: "radio",
+          value: "green",
+          title: "Green"
+        },
+        {
+          name: "color",
+          type: "radio",
+          value: "blue",
+          title: "Blue"
+        },
+        {
+          name: "test",
+          type: "text",
+          title: "Some green text",
+          visible: function(d) {
+            return d.color === "blue";
+          }
+        }
+      ]
+    })
+    .on("change", function(d, name, value) {
+      console.log("changed:", d, "(", name, "=", value, ")");
+    });
+  </script>
+</html>

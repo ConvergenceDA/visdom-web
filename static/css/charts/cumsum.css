@@ -1,0 +1,57 @@
+.cumsum rect.region {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+table.percentiles {
+  border-collapse: collapse;
+}
+
+table.percentiles th,
+table.percentiles td {
+  text-align: right;
+  padding: 2px 2px 0 2px;
+}
+
+table.percentiles td.clear {
+  text-align: left;
+}
+
+table.percentiles tbody th {
+  font-weight: normal;
+}
+
+table.percentiles thead th {
+  font-weight: bold;
+  border-bottom: 1px solid;
+}
+
+table.percentiles th {
+  width: 3em;
+}
+
+table.percentiles td.ratio {
+  color: red;
+}
+
+table.percentiles td.bars {
+  width: 50px;
+}
+
+table.percentiles td.bars .bar {
+  height: .5em;
+  background: #ccc;
+}
+
+  table.percentiles td.bars .bar.untargeted { background: #000; }
+  table.percentiles td.bars .bar.targeted { background: red; }
+
+table.percentiles tr.disabled td,
+table.percentiles tr.disabled th {
+  color: #ccc;
+}
+
+table.percentiles tr.disabled .bar:first-child:before {
+  content: "n/a";
+  font-weight: normal;
+}

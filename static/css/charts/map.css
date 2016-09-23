@@ -1,0 +1,35 @@
+
+.leaflet-container {
+  min-width: 300px;
+  min-height: 300px;
+}
+
+.leaflet-control-attribution a {
+  color: #666;
+  text-decoration: underline;
+}
+
+.custom-control {
+  min-width: 200px;
+  background: #fff;
+  border-radius: 4px;
+  padding: 6px 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.custom-control .title {
+  margin: 0 0 5px 0;
+}
+
+.custom-control p {
+  margin: 0;
+}
+
+.map .mda-tooltip .color:not(.empty) {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  position: relative;
+  top: -.1em;
+}

@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Customer Details</title>
+    <script src="../js/vendor/d3.v3.min.js"></script>
+    <script src="../js/vendor/hashable.js"></script>
+    <script src="../js/mda.js"></script>
+    <script src="../js/mda.model.js"></script>
+    <script src="../js/mda.render.js"></script>
+    <script src="../js/mda.color.js"></script>
+    <script src="../js/mda.ui.js"></script>
+    <script src="../js/mda.charts.js"></script>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="/static/css/charts/tabular.css">
+  </head>
+  <body>
+    <h1>Data table</h1>
+    <form>
+      <p>
+        <label><var>filter by</var> <input id="filter" name="filter" placeholder="column=expr"></label>
+        <a class="merge" href="#?filter=">&times;</a>
+        <span class="eg">e.g.
+          <a class="merge" href="#?filter=kw_mean&lt;1">kw_mean&lt;1</a>,
+          <a class="merge" href="#?filter=zip5=94403">zip5=94403</a>
+        </span>
+      </p>
+      <p>
+        <label><var>y</var> <select id="y" name="y" class="columns"></select></label>
+        <label><input id="asc" type="checkbox" name="asc"> <var>ascending?</var></label>
+        <label><var># of rows</var> <input id="nrows" type="text"></label>
+      </p>
+    </form>
+    <div id="tabular-values"></div>
+  </body>
+  <script>
+
+    var chart = new mda.charts.TabularValues("#tabular-values", {
+        }),
+        model = chart.model,
+        api = chart.api,
+        columnSelect = mda.ui.select(),
+        ycol = d3.select("#y")
+          .on("change", function() {
+            hash.update({y: this.value}).write();
+          }),
+        asc = d3.select("#asc")
+          .on("change", function() {
+            hash.update({asc: this.checked ? 1 : 0}).write();
+          }),
+        nrows = d3.select("#nrows")
+          .on("change", function() {
+            hash.update({nrows: this.value}).write();
+          }),
+        filter = d3.select("#filter")
+          .on("change", function() {
+            hash.update({filter: this.value}).write();
+          }),
+        state = chart.getState(),
+        hash = mda.hash()
+          .format(hashable.format("{y}")
+            .query(true))
+          .data(state)
+          .change(function(e) {
+            if (!e.data) return console.warn("no data:", e.url);
+            state = e.data;
+            state.area = +state.area || 0;
+            state.cum = +state.cum || 0;
+            chart.setState(state).update();
+
+            ycol.call(columnSelect.set, state.y);
+            nrows.property("value", state.nrows);
+            filter.attr("value", state.filter);
+          })
+          .enable();
+
+    var form = d3.select("form")
+      .on("submit", function() {
+        console.log("submit:", d3.event.target);
+        d3.event.preventDefault();
+      });
+
+    d3.selectAll("a.merge")
+      .datum(function() {
+        return hashable.qs.parse(this.getAttribute("href").substr(1));
+      })
+      .on("click", function(d) {
+        hash.update(d).write();
+        // chart.setState(hash.data()).update();
+        d3.event.preventDefault();
+      });
+
+    api.getColumnInfo(function(error, columns) {
+      // columns.sort(d3.ascending);
+
+      model.columns(columns);
+      columnSelect = model.columnSelect();
+
+      var select = d3.selectAll("select.columns")
+        .call(columnSelect);
+
+      hash.check();
+    });
+
+  </script>
+</html>
