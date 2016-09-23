@@ -19,13 +19,13 @@ $ cd visdom-web
 $ conda install --file conda_reqs.txt
 $ pip install -r pip_reqs.txt
 
-<copy your data files into the data folder>
-<modify data_cfg.py.template to data_cfg.py pointing at your data files>
-<update example_META.csv with the features and labels you want to use>
+# <copy your data files into the data folder>
+# <modify data_cfg.py.template to data_cfg.py pointing at your data files>
+# <update example_META.csv with the features and labels you want to use>
 
 $ python VISDOM-server.py
 
-<browse in Chrome or Firefox to http://localhost:8080>
+# <browse in Chrome or Firefox to http://localhost:8080>
 ```
 
 Here are line by line steps for getting started:
