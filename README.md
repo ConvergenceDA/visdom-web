@@ -30,19 +30,19 @@ $ python VISDOM-server.py
 
 Here are line by line steps for getting started:
 
-1. The Anaconda distribution of python (i.e. for scientific computing) is the easiest platform of python to configure for our purposes. Advanced users should feel free ot use the distribution of their choice. To install the minimal version of Anaconda, run the Python 2.7 64-bit installer from (http://conda.pydata.org/miniconda.html)[http://conda.pydata.org/miniconda.html]. Full install instructions are available at (http://conda.pydata.org/docs/install/quick.html)[http://conda.pydata.org/docs/install/quick.html]. All the defaults in the install wizard are fine and you want it to add itself to your system path when asked. *Note:* if you have a pre-existing version of python installed, it will be earlier in your path and you will need to ensure that commands like `conda`, `pip`, and `python` below execute the new Anaconda versions of those files by either moving the Anaconda path entries earlier than the old version of python or by including the full path to your Anaconda installation every time you invoke those commands. Note that if you do not have administrative privileges on your machine that you can install Anaconda just for your user, which bypasses the need for administrative rights.
+1. The Anaconda distribution of python (i.e. for scientific computing) is the easiest platform of python to configure for our purposes. Advanced users should feel free ot use the distribution of their choice. To install the minimal version of Anaconda, run the Python 2.7 64-bit installer from [http://conda.pydata.org/miniconda.html](http://conda.pydata.org/miniconda.html). Full install instructions are available at [http://conda.pydata.org/docs/install/quick.html](http://conda.pydata.org/docs/install/quick.html). All the defaults in the install wizard are fine and you want it to add itself to your system path when asked. *Note:* if you have a pre-existing version of python installed, it will be earlier in your path and you will need to ensure that commands like `conda`, `pip`, and `python` below execute the new Anaconda versions of those files by either moving the Anaconda path entries earlier than the old version of python or by including the full path to your Anaconda installation every time you invoke those commands. Note that if you do not have administrative privileges on your machine that you can install Anaconda just for your user, which bypasses the need for administrative rights.
 
 2. Clone the source into a directory named `visdom-web`. For the purposes of this description, we assume you cloned into `c:\dev\visdom-web` or `~/dev/visdom-web` on OSX/linux, but you can substitute your own path. Run 
-```bash
-git clone https://github.com/ConvergenceDA/visdom-web.git
-#or for ssh users, run 
-git clone git@github.com:ConvergenceDA/visdom-web.git
-```
+  ```bash
+  git clone https://github.com/ConvergenceDA/visdom-web.git
+  #or for ssh users, run 
+  git clone git@github.com:ConvergenceDA/visdom-web.git
+  ```
 
 3. Pull up a command prompt and change into the visdom-web directory (i.e. on windows type `cmd` into the windows start menu and hit return and type `cd c:\dev\visdom-web`) or open the console on OSX or linux and change into the relevant directory: 
-```bash
-cd ~/dev/visdom-web
-```
+  ```bash
+  cd ~/dev/visdom-web
+  ```
 
 4. At the command prompt, type `conda install --file conda_reqs.txt`. This will install the fancy matrix math and tabular data support for python as well as the web server support code.
 
