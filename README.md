@@ -13,7 +13,7 @@ This document will help you get started using the VISDOM analytics website code 
 * To run the app, you need to install a 64 bit version of Python 2.7.X, with all relevant supporting libraries. From there, users check out this source code, add their feature data to the `data` directory in a supported format (i.e. HDF5, csv, or SQLite) and edit `./data_cfg.py.template` into a non-versioned local `data_cfg.py` that points to their data files. When all is in place, the server is started via `python VISDOM-server.py`, which allows users to browse their features at http://localhost:8080.
 
 ### Quick start ###
-```{bash}
+```bash
 git clone https://github.com/ConvergenceDA/visdom-web.git
 cd visdom-web
 conda install --file conda_reqs.txt
