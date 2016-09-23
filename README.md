@@ -6,17 +6,17 @@ This document will help you get started using the VISDOM analytics website code 
 
 * It exposes feature data derived from interval meters via a fast and intuitive filtering, segmentation, and clustering interface.
 * The visual components are delivered as a js app, with visual components rendered using the D3 library.
-* The backend runs on Python, with CherryPy as the web server. It reads HDF5 files containing tabular customer feature data into Pandas data frames, filters, sorts, and aggregates data to respond in JSON to RESTful data requests.
+* The backend runs on Python, with CherryPy as the web server. It reads SQL query results or HDF5 or csv files containing tabular customer feature data into Pandas data frames, filters, sorts, and aggregates data to respond in JSON to RESTful data requests.
 
 ### How do I get set up? ###
 
-* To run the app, you need to install a 64 bit version of Python 2.7.X, with all relevant supporting libraries. From there, users check out this source code, add their feature data to the `data` directory in a supported format (i.e. HDF5 or SQLite) and edit `./data_cfg.py`.template into a non-versioned local `data_cfg.py` that points to their data files. When all is in place, the server is started via `python VISDOM-server.py`, which allows users to browse their features at http://localhost:8080.
+* To run the app, you need to install a 64 bit version of Python 2.7.X, with all relevant supporting libraries. From there, users check out this source code, add their feature data to the `data` directory in a supported format (i.e. HDF5, csv, or SQLite) and edit `./data_cfg.py.template` into a non-versioned local `data_cfg.py` that points to their data files. When all is in place, the server is started via `python VISDOM-server.py`, which allows users to browse their features at http://localhost:8080.
 
 Here are line by line steps for getting started:
 
-1. The Anaconda distribution of python (i.e. for scientific computing) is the easiest platform of python to configure for our purposes. Advanced users should feel free ot use the distribution of their choice. To install anaconda, run the Python 2.7 64-bit installer from http://conda.pydata.org/miniconda.html. All the defaults in the install wizard are fine and you want it to add itself to your system path when asked. Note that if you have a pre-existing version of python installed, it will be earlier in your path and you will need to ensure that commands like `conda`, `pip`, and `python` below execute the new Anaconda versions of those files by either moving the anaconda path entries earlier than the old version of python or by including the full path to your anaconda installation every time you invoke those commands. Note that if you do not have administrative privileges on your machine that you can install anaconda just for your user, which bypasses the need for administrative rights.
+1. The Anaconda distribution of python (i.e. for scientific computing) is the easiest platform of python to configure for our purposes. Advanced users should feel free ot use the distribution of their choice. To install the minimal version of Anaconda, run the Python 2.7 64-bit installer from http://conda.pydata.org/miniconda.html. All the defaults in the install wizard are fine and you want it to add itself to your system path when asked. Note that if you have a pre-existing version of python installed, it will be earlier in your path and you will need to ensure that commands like `conda`, `pip`, and `python` below execute the new Anaconda versions of those files by either moving the Anaconda path entries earlier than the old version of python or by including the full path to your Anaconda installation every time you invoke those commands. Note that if you do not have administrative privileges on your machine that you can install Anaconda just for your user, which bypasses the need for administrative rights.
 
-2. Clone the source into a directory named `visdom-web`. For the purposes of this description, we assume you cloned into `c:\dev\visdom-web` or `~/dev/visdom-web` on OSX/linux, but you can substitute your own path. Run `git clone https://username@bitbucket.org/sssllab/visdom-web.git` of for ssh users, run `git clone git@bitbucket.org:sssllab/visdom-web.git`.
+2. Clone the source into a directory named `visdom-web`. For the purposes of this description, we assume you cloned into `c:\dev\visdom-web` or `~/dev/visdom-web` on OSX/linux, but you can substitute your own path. Run `git clone https://github.com/ConvergenceDA/visdom-web.git` of for ssh users, run `git clone git@github.com:ConvergenceDA/visdom-web.git`.
 
 3. Pull up a command prompt and change into the visdom-web directory (i.e. on windows type `cmd` into the windows start menu and hit return and type `cd c:\dev\visdom-web`) or open the console on OSX or linux and change into the relevant directory: `cd ~/dev/visdom-web`
 
@@ -40,4 +40,4 @@ See the wiki page [wiki/Installation](wiki/Installation) for more platform speci
 
 ### Who do I talk to? ###
 
-* Contact sborgeson@stanford.edu with questions, comments or contributions.
+* Contact sam@convergenceda.com with questions, comments or contributions.
