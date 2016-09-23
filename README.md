@@ -44,19 +44,22 @@ Here are line by line steps for getting started:
   cd ~/dev/visdom-web
   ```
 
-4. At the command prompt, type `conda install --file conda_reqs.txt`. This will install the fancy matrix math and tabular data support for python as well as the web server support code.
+4. Run `conda install` and `pip install` commands to install the Python module requirements for VISDOM-web. Conda will install Numpy, Pandas, support for various tabular data and database data formats and the CherryPy web server support modules. Pip will install a couple of miscellaneous packages.
 
-5. At the command prompt, type `pip install -r pip_reqs.txt`. This will install a few other python libraries that we rely on.
+  ```bash
+  conda install --file conda_reqs.txt
+  pip install -r pip_reqs.txt
+  ```
 
-6. Copy your data file(s) into `visdom-web/data`. See XXX TBD document on generating appropriate data files from R.
+5. Copy your data file(s) into `visdom-web/data`. See XXX TBD document on generating appropriate data files from R.
 
-7. If you want to control which features are used by the web interface and what they are called (i.e. human readable names), create and reference a feature metadata csv. Note that `visdom-web/data/example_META.csv` provides a working example with most standard VISDOM features that you can modify.
+6. If you want to control which features are used by the web interface and what they are called (i.e. human readable names), create and reference a feature metadata csv. Note that `visdom-web/data/example_META.csv` provides a working example with most standard VISDOM features that you can modify.
 
-8. Copy `visdom-web/data_cfg.py.template` to `visdom-web/data_cfg.py`. And edit it to point to your data files and metadata csv file (relative paths starting with `data` are fine). 
+7. Copy `visdom-web/data_cfg.py.template` to `visdom-web/data_cfg.py`. And edit it to point to your data files and metadata csv file (relative paths starting with `data` are fine). 
 
-9. From the command line, which should still be at `visdom-web`, type `python VISDOM-server.py`. If it says 'ENGINE Serving on http://127.0.0.1:8080', you're set.
+8. From the command line, which should still be at `visdom-web`, type `python VISDOM-server.py`. If it says 'ENGINE Serving on http://127.0.0.1:8080', you're set.
 
-10. Go to http://localhost:8080 to browse your features.
+9. Go to http://localhost:8080 to browse your features.
 
 Note that there may be platform specific errors, especially with HDF5 support that need to be worked through on a case by case basis.
 
