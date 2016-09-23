@@ -12,6 +12,15 @@ This document will help you get started using the VISDOM analytics website code 
 
 * To run the app, you need to install a 64 bit version of Python 2.7.X, with all relevant supporting libraries. From there, users check out this source code, add their feature data to the `data` directory in a supported format (i.e. HDF5, csv, or SQLite) and edit `./data_cfg.py.template` into a non-versioned local `data_cfg.py` that points to their data files. When all is in place, the server is started via `python VISDOM-server.py`, which allows users to browse their features at http://localhost:8080.
 
+### Quick start ###
+```{bash}
+git clone https://github.com/ConvergenceDA/visdom-web.git
+cd visdom-web
+conda install --file conda_reqs.txt
+pip install -r pip_reqs.txt
+python VISDOM-server.py
+```
+
 Here are line by line steps for getting started:
 
 1. The Anaconda distribution of python (i.e. for scientific computing) is the easiest platform of python to configure for our purposes. Advanced users should feel free ot use the distribution of their choice. To install the minimal version of Anaconda, run the Python 2.7 64-bit installer from http://conda.pydata.org/miniconda.html. All the defaults in the install wizard are fine and you want it to add itself to your system path when asked. Note that if you have a pre-existing version of python installed, it will be earlier in your path and you will need to ensure that commands like `conda`, `pip`, and `python` below execute the new Anaconda versions of those files by either moving the Anaconda path entries earlier than the old version of python or by including the full path to your Anaconda installation every time you invoke those commands. Note that if you do not have administrative privileges on your machine that you can install Anaconda just for your user, which bypasses the need for administrative rights.
