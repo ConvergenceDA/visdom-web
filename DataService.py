@@ -464,7 +464,7 @@ class DataSource(six.with_metaclass(Singleton, object)):
               assert( int(pd.__version__.split('.')[0]) > 0 or int(pd.__version__.split('.')[1]) >= 18 )
               df.eval(evalStr, inplace=True)
             except:
-              df.eval(evalStr)
+              df = df.eval(evalStr)
           except:
             print('Eval failed')
             print("Error:", sys.exc_info()[0])
@@ -488,7 +488,10 @@ class DataSource(six.with_metaclass(Singleton, object)):
       # the basic problem seems to be that some apartment buildings are 
       # mixed in with the regular households. Maybe there is a better way to 
       # handle this.
-      if(dfName == 'basics'): df = df.loc[df['kw_mean'] < 7,:]
+      if (dfName == 'basics'):
+        smalls = df['kw_mean'] < 7.0
+        if smalls.any():
+          df = df.loc[smalls,:]
       self.memCache[dfName] = df # cache it for later
     
       #df = df.loc[df['therm.mean.annual'] < 10,:]
