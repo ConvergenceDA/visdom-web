@@ -1,8 +1,9 @@
 sources = {
     # Sample basic features
     'basics'          : { 'label'          : 'Basic data features', 
+                          'public'         : True, 
+                          'prefix'         : 'basics',
                           'dataFormat'     : 'csv',    
-                          'public'         : True,  
                           'dataIdentifier' : 'data/basic_features.csv',  
                           'colMetaFile'    : 'data/basic_features_META.csv'},
   }
