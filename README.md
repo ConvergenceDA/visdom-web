@@ -16,7 +16,7 @@ This document will help you get started using the VISDOM analytics website code 
 ```bash
 $ git clone https://github.com/ConvergenceDA/visdom-web.git
 $ cd visdom-web
-$ conda install --file conda_reqs.txt
+$ conda install -y --file conda_reqs.txt
 $ pip install -r pip_reqs.txt
 
 # <copy your data files into the data folder>
@@ -47,7 +47,7 @@ Here are line by line steps for getting started:
 4. Run `conda install` and `pip install` commands to install the Python module requirements for VISDOM-web. Conda will install Numpy, Pandas, support for various tabular data and database data formats and the CherryPy web server support modules. Pip will install a couple of miscellaneous packages.
 
   ```bash
-  conda install --file conda_reqs.txt
+  conda install -y --file conda_reqs.txt
   pip install -r pip_reqs.txt
   ```
 
