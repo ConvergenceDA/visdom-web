@@ -155,7 +155,7 @@ class QueryService(object):
 
     expiringFilterCache = cherrypy.session.setdefault('EXPIRING_FILTER_CACHE', cachetools.TTLCache(maxsize=20, ttl=30*60))
     # ExpiringDict is a fisrt in first out
-    # expiringFilterCache = cherrypy.session.setdefault('EXPIRING_FILTER_CACHE', ExpiringDict(max_len=20, max_age_seconds=30*60))
+    #expiringFilterCache = cherrypy.session.setdefault('EXPIRING_FILTER_CACHE', ExpiringDict(max_len=20, max_age_seconds=30*60))
     # OR non-expiring version which would leak memory
     #expiringFilterCache = cherrypy.session.setdefault('EXPIRING_FILTER_CACHE', dict())
     

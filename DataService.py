@@ -9,7 +9,6 @@ import sys
 import sqlite3
 import traceback
 
-
 #logging.basicConfig(filename='example.log',level=logging.DEBUG)
 #logging.debug('This message should go to the log file')
 #logging.info('So should this')
@@ -107,7 +106,7 @@ def parseFilters(fStr,expandFilters=False):
 
 def parseFilter(fStr):
   # operators include >,>=,<,<=,'in','isnull',= and can all be negated with !
-  #print re.split("(!?=?=|!?<=?|!?>=?|!?'isnull'|!?'in')",fStr)
+  #print( re.split("(!?=?=|!?<=?|!?>=?|!?'isnull'|!?'in')",fStr) )
   (featureName,opr,val) = re.split("(!?=?=|!?<=?|!?>=?|!?'isnull'|!?'in')",fStr)
   inverseSelection = opr[0] == '!'    
   if inverseSelection: opr = opr[1:]
@@ -465,7 +464,7 @@ class DataSource(six.with_metaclass(Singleton, object)):
               assert( int(pd.__version__.split('.')[0]) > 0 or int(pd.__version__.split('.')[1]) >= 18 )
               df.eval(evalStr, inplace=True)
             except:
-              df = df.eval(evalStr)
+              df.eval(evalStr)
           except:
             print('Eval failed')
             print("Error:", sys.exc_info()[0])
