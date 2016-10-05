@@ -27,7 +27,7 @@ def timefn(func):
   return wrapper
 
 def loadData(filePath,varName):
-  return pd.read_hdf(fileName,variableName)
+  return pd.read_hdf(filePath,varName)
 
 def colNames(df):
     return df.columns.values.tolist()
@@ -391,7 +391,7 @@ def executeQuery(query,cache=None):
 
 def loadHDF5(fName,tblName):
   print(( 'Loading hdf5 data, %s (%s), into python DataFrame (via Pandas)' % (fName,tblName) ))
-  return pd.read_hdf(fileName,variableName)
+  return pd.read_hdf(fName,tblName)
 
 def loadCSV(fName,tblName=None):
   print(( 'Loading csv data, %s, into python DataFrame (via Pandas)' % (fName) ))
