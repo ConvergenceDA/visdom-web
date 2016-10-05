@@ -15,10 +15,10 @@ except ImportError:
   from urllib.parse import unquote
 import logging
 import mimetypes
-from expiringdict import ExpiringDict 
+# this is a new dependency
+import cachetools # pip install cachetools
 import numpy as np
 import pandas as pd
-from pandasTools import *
 
 import cherrypy
 
@@ -148,9 +148,16 @@ class QueryService(object):
     cherrypy.response.headers['Content-Type'] = 'application/json'
     mdr = self.metaDataResponse(queryObj)
     if mdr: return mdr
-    # ExpiringDict is a fisrt in first out 
-    expiringFilterCache = cherrypy.session.setdefault('EXPIRING_FILTER_CACE', ExpiringDict(max_len=20, max_age_seconds=30*60))
-    #expiringFilterCache = cherrypy.session.setdefault('EXPIRING_FILTER_CACE', dict())
+    # TODO: deprecate the use of ExpiringDict as it doesn't support Python 3 (md5 is gone)
+    # Use cachetools.TTLCache(maxsize=20, ttl=30*60)
+    # Note that memory isn't freed for expired items until a mutating set/delete operation is called.
+    # https://pythonhosted.org/cachetools/
+
+    expiringFilterCache = cherrypy.session.setdefault('EXPIRING_FILTER_CACHE', cachetools.TTLCache(maxsize=20, ttl=30*60))
+    # ExpiringDict is a fisrt in first out
+    # expiringFilterCache = cherrypy.session.setdefault('EXPIRING_FILTER_CACHE', ExpiringDict(max_len=20, max_age_seconds=30*60))
+    # OR non-expiring version which would leak memory
+    #expiringFilterCache = cherrypy.session.setdefault('EXPIRING_FILTER_CACHE', dict())
     
     df = ds.executeQuery(queryObj, expiringFilterCache) # pass in the session to allow query result caching
     if (queryObj['fmt'] == 'csv'): 

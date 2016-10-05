@@ -2,7 +2,6 @@ from __future__ import absolute_import
 from __future__ import print_function
 import numpy as np
 import pandas as pd
-import pandasTools
 import pandas.io.sql
 import logging
 import random, re
@@ -29,7 +28,7 @@ def timefn(func):
   return wrapper
 
 def loadData(filePath,varName):
-  return pandasTools.loadHDF5(filePath,varName)
+  return pd.read_hdf(fileName,variableName)
 
 def colNames(df):
     return df.columns.values.tolist()
@@ -393,7 +392,7 @@ def executeQuery(query,cache=None):
 
 def loadHDF5(fName,tblName):
   print(( 'Loading hdf5 data, %s (%s), into python DataFrame (via Pandas)' % (fName,tblName) ))
-  return pandasTools.loadHDF5( fName,tblName )
+  return pd.read_hdf(fileName,variableName)
 
 def loadCSV(fName,tblName=None):
   print(( 'Loading csv data, %s, into python DataFrame (via Pandas)' % (fName) ))
@@ -430,6 +429,8 @@ class DataSource(six.with_metaclass(Singleton, object)):
 
   loadfn = {
     'hdf'    : loadHDF5,
+    'hdf5'   : loadHDF5,
+    'h5'     : loadHDF5,
     'sqlite' : loadSQLite,
     'csv'    : loadCSV,
   }
