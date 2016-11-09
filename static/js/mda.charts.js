@@ -1804,7 +1804,12 @@
 
         // Map charts have a "map" property that is an L.Map instance
         this.map = L.map(mapRoot, this.options.map)
-          .setView([37.5, -119.3], 6)
+          // Note: The lat, lon and zoom level should be configured my mda.config.latlon and mda.config.zoom
+          // If they aren't this setView will fail.
+          //alert('latlon: ' + mda.config.latlon + ', zoom: ' + mda.config.zoom)
+          // example values for CA
+          //.setView([37.5, -119.3], 6)
+          .setView(mda.config.latlon, mda.config.zoom)
           .addLayer(L.tileLayer("http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png", {
             attribution: [
               'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>.',

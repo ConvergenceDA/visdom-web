@@ -1,6 +1,11 @@
 ## Static Data
 This directory contains static data files that will be used on the front-end,
-such as geographic data for California. To rebuild these files, just run:
+such as geographic data for California. 
+
+The Make process depends on Node.js (https://nodejs.org/en/download/), with topojson installed:
+`npm install topojson`
+
+To rebuild these files, just run:
 
 ```sh
 $ make clean all

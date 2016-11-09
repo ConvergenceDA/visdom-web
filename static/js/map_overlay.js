@@ -41,7 +41,7 @@ function loadZipShapes(kml,callback) {
 }
 
 function loadGeoJsonZcta(state) {
-  $.getJSON( "static/%s.geojson" % state, 
+  $.getJSON( "static/%s.geojson" % state,
   function( data ) {
     alert(data);
   });
