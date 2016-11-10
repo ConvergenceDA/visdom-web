@@ -475,10 +475,14 @@ class DataSource(six.with_metaclass(Singleton, object)):
         for i in categories.index:
           try:
             cat = categories.loc[i,:]
-            #print cat
             if df[i].dtypes != object: 
               print('Converting %s to strings' % i)
-              df[i] = df[i].apply(str)
+              if( i == 'zip5' ):
+                def pad(n):
+                  return( format(n,'05d') )
+                df[i] = df[i].apply(pad)
+              else:
+                df[i] = df[i].apply(str)
           except:
             print('Category conversion failed for %s' % i)
             print("Error:", sys.exc_info()[0])
