@@ -51,7 +51,7 @@ Here are line by line steps for getting started:
   pip install -r pip_reqs.txt
   ```
 
-5. Copy your data file(s) into `visdom-web/data`. See the companion project [http://github.com/convergenceda/visdom/] and specifically, [http://github.com/convergenceda/visdom/vignettes/example_feature_extraction.rmd] for the details on computing customer features and exporting data files from R.
+5. Copy your data file(s) into `visdom-web/data`. See the companion project http://github.com/convergenceda/visdom/ and specifically, https://github.com/ConvergenceDA/visdom/blob/master/vignettes/example_feature_extraction.rmd for the details on computing customer features and exporting data files from R.
 
 6. If you want to control which features are used by the web interface and what they are called (i.e. human readable names), create and reference a feature metadata csv. Note that `visdom-web/data/example_META.csv` provides a working example with most standard VISDOM features that you can modify.
 
