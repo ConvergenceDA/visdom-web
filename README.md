@@ -65,7 +65,7 @@ Here are line by line steps for getting started:
   The fields are used as follows
   
   * `variable` The name of the varialbe as found in the data table. These are the same as the names of the columns from the R data frame they are derived from, except that the export code cleans up dots and other punctuation, making them all underscores.
-  * `formula` An optional field for defining a 'meta field' using a simple formula composed of other variable names. It is used in a Pandas `df.eval()` to define the new field.
+  * `formula` An optional field for defining a 'meta variable' using a simple formula composed of other variable names. It is used in a Pandas `df.eval()` to define the new variable values, so look to Pandas documentation for capabilites and limitations.
   * `group` The named group that the feature should be a a part of. If the group name starts with a number and dot, as in `1.geography`, the number is parsed to determine the order of the groups in the web-based menues of features found in the web interface.
   * `units` Optional field for the display units to use when presenting the feature, i.e. kW, etc. in figures in the web interface.
   * `type` The data type of the feature. One of `int`, `float`, or `category`. Some visuals only work with numerical or category data and the visual filters for numerical data are presented as histograms while categorical data is presented as a multi-select.
