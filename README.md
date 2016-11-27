@@ -55,7 +55,28 @@ Here are line by line steps for getting started:
 
 6. If you want to control which features are used by the web interface and what they are called (i.e. human readable names), create and reference a feature metadata csv. Note that `visdom-web/data/example_META.csv` provides a working example with most standard VISDOM features that you can modify.
 
-7. Copy `visdom-web/data_cfg.py.template` to `visdom-web/data_cfg.py`. And edit it to point to your data files and metadata csv file (relative paths starting with `data` are fine). 
+7. Copy `visdom-web/data_cfg.py.template` to `visdom-web/data_cfg.py`. And edit it to point to your data files and metadata csv file (relative paths starting with `data` are fine). Entries in the data_cfg.py look like this:
+
+```python
+sources = {
+    # Sample basic features
+    'basics'          : { 'label'          : 'Basic data features', 
+                          'public'         : True, 
+                          'prefix'         : 'basics',
+                          'dataFormat'     : 'csv',    
+                          'dataIdentifier' : 'data/basic_features.csv',  
+                          'colMetaFile'    : 'data/basic_features_META.csv'},
+  }
+```
+
+* `label` 
+* `public`
+* `prefix`
+* `dataFormat`
+* `dataIdentifier`
+* `colMetaFile`
+* `dataTable`
+
 
 8. From the command line, which should still be at `visdom-web`, type `python VISDOM-server.py`. If it says 'ENGINE Serving on http://127.0.0.1:8080', you're set.
 
