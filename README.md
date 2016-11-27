@@ -69,14 +69,16 @@ sources = {
   }
 ```
 
-* `label` 
-* `public`
-* `prefix`
-* `dataFormat`
-* `dataIdentifier`
-* `colMetaFile`
-* `dataTable`
+The config file is a python file that contains a dict names `sources`. Each entry in this dict corresponds to a table of data (i.e. data that is loaded into a Pandas DataFrame) that can be referenced and accessed via the web interface. Although the example file contains only one entry, you can define multiple entries and these will be used to populate a list of available data sources in the web interface (if public). 
 
+* Data source name, `basics` in this case is the key in the python dict that contains the configuration information for the data. It is also the name of the data source in the RESTful data interface and will thus be found in urls related to the configured data.
+* `label` The human readable label for the configured data table, used in html option/select menus to describe the data, so should be kept as short as possible.
+* `public` A boolean that indicates whether the data table should be available in the menu of avalaible data sources in the web interface. Data that supports custom functionality, like load shape or demand response event outcome data, can be made available to the applicaiton for internal use without public listing.
+* `prefix` The naming convention prefix used to associate the configured dat atable with other associated custom data tables. The most prominent usage for this field is, again, load shape data that is associated with the configured feature data.
+* `dataFormat` One of `csv`, `hdf`, or `sqlite`, specifying the format of the resource (i.e. file or database table) pointed to by the `dataIdentifier`
+* `dataIdentifier` Path to the data file or database that contains the feature data being configured.
+* `colMetaFile` Metadata csv file that contains human readable labels, data types, units, and menu grouping for each feature found in the feature data. Any features not listed in the META file will not be displayed in the web interface, so it can be used to edit the list of avaialble feautures.
+* `dataTable` Optional additional identifier used to locate the feature data table by name in data formats that have multiple tables (i.e. hdf5 and databases).
 
 8. From the command line, which should still be at `visdom-web`, type `python VISDOM-server.py`. If it says 'ENGINE Serving on http://127.0.0.1:8080', you're set.
 
