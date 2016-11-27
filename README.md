@@ -53,7 +53,12 @@ Here are line by line steps for getting started:
 
 5. Copy your data file(s) into `visdom-web/data`. See the companion project http://github.com/convergenceda/visdom/ and specifically, https://github.com/ConvergenceDA/visdom/blob/master/vignettes/example_feature_extraction.rmd for the details on computing customer features and exporting data files from R.
 
-6. If you want to control which features are used by the web interface and what they are called (i.e. human readable names), create and reference a feature metadata csv. Note that `visdom-web/data/example_META.csv` provides a working example with most standard VISDOM features that you can modify.
+6. If you want to control which features are used by the web interface and what they are called (i.e. human readable names), create and reference a feature metadata csv. Note that `visdom-web/data/example_META.csv` provides a working example with most standard VISDOM features that you can modify. 
+
+  variable|formula|group|units|type|label
+  zip5||1.geography||category|5 digit zip code
+  nObs||7.meta|count|int|# of electricity observations
+  kw_mean||2.consumption|kW|float|mean demand (all obs)
 
 7. Copy `visdom-web/data_cfg.py.template` to `visdom-web/data_cfg.py`. And edit it to point to your data files and metadata csv file (relative paths starting with `data` are fine). Entries in the data_cfg.py look like this:
 
