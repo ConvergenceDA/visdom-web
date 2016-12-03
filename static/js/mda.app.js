@@ -995,7 +995,8 @@
     LOAD_SHAPES: {
       id: "load-shapes",
       name: "Load Shapes ",
-      sources: ["basics160k","SmartAC","PGEres","ohm"],
+      // sources that are allowed to display load shape visuals found in mda.config.js
+      sources: [].concat(mda.config.LOAD_SHAPE_sources || []),
       // put the form before the legend
       formBeforeLegend: true,
       fields: [
@@ -1026,8 +1027,9 @@
 
     RESPONSE: {
       id: "load-responses",
-      name: "Ohm Responses",
-      sources: ["ohm"],
+      name: "DR Responses",
+      // sources that are allowed to display DR response visuals found in mda.config.js
+      sources: [].concat(mda.config.RESPONSE_sources || []),
       // put the form before the legend
       formBeforeLegend: true,
       fields: [
