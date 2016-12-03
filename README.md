@@ -53,9 +53,48 @@ Here are line by line steps for getting started:
 
 5. Copy your data file(s) into `visdom-web/data`. See the companion project http://github.com/convergenceda/visdom/ and specifically, https://github.com/ConvergenceDA/visdom/blob/master/vignettes/example_feature_extraction.rmd for the details on computing customer features and exporting data files from R.
 
-6. If you want to control which features are used by the web interface and what they are called (i.e. human readable names), create and reference a feature metadata csv. Note that `visdom-web/data/example_META.csv` provides a working example with most standard VISDOM features that you can modify.
+6. If you want to control which features are used by the web interface and what they are called (i.e. human readable names), create and reference a feature metadata csv. Note that `visdom-web/data/example_META.csv` provides a working example with most standard VISDOM features that you can modify. The META file has the following format:
 
-7. Copy `visdom-web/data_cfg.py.template` to `visdom-web/data_cfg.py`. And edit it to point to your data files and metadata csv file (relative paths starting with `data` are fine). 
+  |variable|formula|group|units|type|label|
+  |--------|-------|-----|-----|----|-----|
+  |zip5||1.geography||category|5 digit zip code|
+  |nObs||7.meta|count|int|# of electricity observations|
+  |kw_mean||2.consumption|kW|float|mean demand (all obs)|
+  |toutC|(tout - 32) * 5/9|6.weather|deg C|float|Annual mean outside temperature|
+  
+  The fields are used as follows
+  
+  * `variable` The name of the varialbe as found in the data table. These are the same as the names of the columns from the R data frame they are derived from, except that the export code cleans up dots and other punctuation, making them all underscores.
+  * `formula` An optional field for defining a 'meta variable' using a simple formula composed of other variable names. It is used in a Pandas `df.eval()` to define the new variable values, so look to Pandas documentation for capabilites and limitations.
+  * `group` The named group that the feature should be a a part of. If the group name starts with a number and dot, as in `1.geography`, the number is parsed to determine the order of the groups in the web-based menues of features found in the web interface.
+  * `units` Optional field for the display units to use when presenting the feature, i.e. kW, etc. in figures in the web interface.
+  * `type` The data type of the feature. One of `int`, `float`, or `category`. Some visuals only work with numerical or category data and the visual filters for numerical data are presented as histograms while categorical data is presented as a multi-select.
+  * `label` The human readable label for the feature used in menus throughout the web tool.
+
+7. Copy `visdom-web/data_cfg.py.template` to `visdom-web/data_cfg.py`. And edit it to point to your data files and metadata csv file (relative paths starting with `data` are fine). Entries in the data_cfg.py look like this:
+
+  ```python
+  sources = {
+      # Sample basic features
+      'basics'          : { 'label'          : 'Basic data features', 
+                            'public'         : True, 
+                            'prefix'         : 'basics',
+                            'dataFormat'     : 'csv',    
+                            'dataIdentifier' : 'data/basic_features.csv',  
+                            'colMetaFile'    : 'data/basic_features_META.csv'},
+    }
+  ```
+
+  The config file is a python file that contains a dict names `sources`. Each entry in this dict corresponds to a table of data (i.e. data that is loaded into a Pandas DataFrame) that can be referenced and accessed via the web interface. Although the example file contains only one entry, you can define multiple entries and these will be used to populate a list of available data sources in the web interface (if public). 
+
+  * Data source name, `basics` in this case is the key in the python dict that contains the configuration information for the data. It is also the name of the data source in the RESTful data interface and will thus be found in urls related to the configured data.
+  * `label` The human readable label for the configured data table, used in html option/select menus to describe the data, so should be kept as short as possible.
+  * `public` A boolean that indicates whether the data table should be available in the menu of avalaible data sources in the web interface. Data that supports custom functionality, like load shape or demand response event outcome data, can be made available to the applicaiton for internal use without public listing.
+  * `prefix` The naming convention prefix used to associate the configured dat atable with other associated custom data tables. The most prominent usage for this field is, again, load shape data that is associated with the configured feature data.
+  * `dataFormat` One of `csv`, `hdf`, or `sqlite`, specifying the format of the resource (i.e. file or database table) pointed to by the `dataIdentifier`
+  * `dataIdentifier` Path to the data file or database that contains the feature data being configured.
+  * `colMetaFile` Metadata csv file that contains human readable labels, data types, units, and menu grouping for each feature found in the feature data. Any features not listed in the META file will not be displayed in the web interface, so it can be used to edit the list of avaialble feautures.
+  * `dataTable` Optional additional identifier used to locate the feature data table by name in data formats that have multiple tables (i.e. hdf5 and databases).
 
 8. From the command line, which should still be at `visdom-web`, type `python VISDOM-server.py`. If it says 'ENGINE Serving on http://127.0.0.1:8080', you're set.
 
