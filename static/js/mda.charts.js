@@ -1919,29 +1919,22 @@
       },
 
       setFeatures: function(collection) {
-        if ( Object.keys(this.zctaToZip).length != 0) {
-          console.info('why here')
-          var features = this.features = collection.features;
+        var features = this.features = collection.features;
 
-          var zctaToZip = this.zctaToZip,
-              featuresByZcta = this.featuresByZcta = {},
-              featuresByZip = this.featuresByZip = {};
+        var zctaToZip = this.zctaToZip,
+            featuresByZcta = this.featuresByZcta = {},
+            featuresByZip = this.featuresByZip = {};
 
-          features.forEach(function (feature) {
-            var zcta = feature.properties.ZCTA,
-                zip = zctaToZip[zcta];
-            featuresByZcta[zcta] = feature;
-            if (zip) {
-              featuresByZip[zip] = feature;
-            }
-          })
-          this.geoJson.addData(collection);
-          return this;
-        }
-        else {
-          alert('trying to get zcta data');
-          setTimeout(this.setFeatures, 250, collection);
-        }
+        features.forEach(function (feature) {
+          var zcta = feature.properties.ZCTA,
+              zip = zctaToZip[zcta];
+          featuresByZcta[zcta] = feature;
+          if (zip) {
+            featuresByZip[zip] = feature;
+          }
+        })
+        this.geoJson.addData(collection);
+        return this;
       },
 
       setZctaLookup: function(lookup) {

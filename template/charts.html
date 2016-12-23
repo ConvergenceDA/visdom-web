@@ -148,6 +148,10 @@ var app = (function() {
           var map = types.MAP.create(root, options);
           queue()
             .defer(map.loadZctaLookup.bind(map), this.dataPath + "zipToZcta.json")
+            .await(function(error) {
+              if (error) return alert("Unable to load map data: " + error);
+            });
+          queue()
             .defer(map.loadFeatures.bind(map), this.dataPath + mda.config.geojson) //"CA_smaller.geojson")
             .await(function(error) {
               if (error) return alert("Unable to load map data: " + error);
