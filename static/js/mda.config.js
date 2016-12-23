@@ -12,7 +12,7 @@ mda.config = {
     // data sources for which we should render the load shape visualization
     LOAD_SHAPE_sources : ["basics160k","SmartAC","PGEres","ohm"],
     // data source for which we should render the DR response estimate shapes
-    LOAD_SHAPE_sources : ["ohm"]
+    RESPONSE_sources : ["ohm"]
 
     // VT
     // map center lat, lon
