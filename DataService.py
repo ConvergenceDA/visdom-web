@@ -407,6 +407,17 @@ def loadSQLite(fName,tblName):
     if con: con.close()
   return out
 
+def loadSQL(db_uri,tblName):
+  from sqlalchemy import create_engine
+  connection = None
+  try:
+    engine = create_engine(db_uri)
+    connection = engine.raw_connection()
+    df = pandas.read_sql('select * from %s where runId=1' % tblName, connection)
+  finally:
+    if connection: connection.close()
+  return df
+
 def publicSources():
   dataSources = DataSource.directory
   out = {}
@@ -432,6 +443,7 @@ class DataSource(six.with_metaclass(Singleton, object)):
     'h5'     : loadHDF5,
     'sqlite' : loadSQLite,
     'csv'    : loadCSV,
+    'sql'    : loadSQL,
   }
 
   memCache = { }
