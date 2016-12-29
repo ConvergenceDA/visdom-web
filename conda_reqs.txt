@@ -6,4 +6,6 @@ numexpr
 Cython
 pytables
 cherrypy
+sqlalchemy
+mysql-connector-python
 jinja2

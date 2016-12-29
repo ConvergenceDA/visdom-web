@@ -146,12 +146,8 @@ var app = (function() {
         create: function(root, options) {
           // NOTE: map latlon and zoom are in mda.config.js, along with the name of the geojosn file used below
           var map = types.MAP.create(root, options);
-          queue()
-            .defer(map.loadZctaLookup.bind(map), this.dataPath + "zipToZcta.json")
-            .await(function(error) {
-              if (error) return alert("Unable to load map data: " + error);
-            });
-          queue()
+          queue(1) // load these serially as the second depends on the first
+            .defer(map.loadZctaLookup.bind(map), this.dataPath + mda.config.zctaToZip) //"zipToZcta.json")
             .defer(map.loadFeatures.bind(map), this.dataPath + mda.config.geojson) //"CA_smaller.geojson")
             .await(function(error) {
               if (error) return alert("Unable to load map data: " + error);

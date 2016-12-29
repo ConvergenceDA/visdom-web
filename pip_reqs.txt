@@ -1,5 +1,2 @@
 python-dateutil
 cachetools
-cherrypy
-sqlalchemy
-mysql-python

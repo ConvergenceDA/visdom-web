@@ -5,13 +5,13 @@ sources = {
                           'prefix'         : 'basics',
                           'dataFormat'     : 'csv',    
                           'dataIdentifier' : 'data/basic_features.csv',  
-                          'colMetaFile'    : 'data/basic_features_META.csv'},
+                          'colMetaFile'    : 'data/example_META.csv'},
     # Sample basic features
     'basics_sql'      : { 'label'          : 'Basic data features via SQL', 
                           'public'         : True, 
                           'prefix'         : 'basics_sql',
                           'dataFormat'     : 'sql',    
                           'dataIdentifier' : 'mysql://username:password@127.0.0.1:3306/db_name',  
-                          'colMetaFile'    : 'data/basic_features2_META.csv',
+                          'colMetaFile'    : 'data/example_META.csv',
                           'dataTable'      : 'example_feature_set'},
   }
