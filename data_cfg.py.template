@@ -13,5 +13,5 @@ sources = {
                           'dataFormat'     : 'sql',    
                           'dataIdentifier' : 'mysql://username:password@127.0.0.1:3306/db_name',  
                           'colMetaFile'    : 'data/example_META.csv',
-                          'dataTable'      : 'example_feature_set'},
+                          'dataTable'      : 'select * from example_feature_set'},
   }

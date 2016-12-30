@@ -1,2 +1,5 @@
 python-dateutil
 cachetools
+#note python 3 users should uncomment this line, which installs the oursql driver
+# see https://filippo.io/sqlalchemy-plus-mysql-plus-python-3-plus-pip/
+#https://launchpad.net/oursql/py3k/py3k-0.9.4/+download/oursql-0.9.4.zip

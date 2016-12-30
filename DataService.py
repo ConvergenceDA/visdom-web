@@ -407,13 +407,13 @@ def loadSQLite(fName,tblName):
     if con: con.close()
   return out
 
-def loadSQL(db_uri,tblName):
+def loadSQL(db_uri,dataQuery):
   from sqlalchemy import create_engine
   connection = None
   try:
     engine = create_engine(db_uri)
     connection = engine.raw_connection()
-    df = pandas.read_sql('select * from %s where runId=1' % tblName, connection)
+    df = pandas.read_sql(dataQuery, connection)
   finally:
     if connection: connection.close()
   return df
