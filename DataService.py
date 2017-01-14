@@ -348,7 +348,7 @@ def executeQuery(query,cache=None):
       #print newdf[col]
       newdf = newdf.loc[newdf[col].notnull(),:] # filter out nulls 
       histdf = newdf[col].replace([np.inf, -np.inf], np.nan) # no inf values
-      histdf = histdf[~np.isnan(histdf)] # no nan values
+      histdf = histdf.dropna() # no nan values
       hist,bin_edges = np.histogram(histdf,bins=n,range=rng)
       #print hist
       newdf = pd.DataFrame(hist,columns=['counts'])
@@ -487,6 +487,7 @@ class DataSource(six.with_metaclass(Singleton, object)):
         for i in categories.index:
           try:
             cat = categories.loc[i,:]
+            print(i, df[i].dtypes)
             if df[i].dtypes != object: 
               print('Converting %s to strings' % i)
               if( i == 'zip5' ):
@@ -499,20 +500,7 @@ class DataSource(six.with_metaclass(Singleton, object)):
             print('Category conversion failed for %s' % i)
             print("Error:", sys.exc_info()[0])
             #print err
-      # TODO / HACK: this is currently a hack to prevent out of scale values
-      # from interfering with normal ones in scatter and histogram views
-      # the basic problem seems to be that some apartment buildings are 
-      # mixed in with the regular households. Maybe there is a better way to 
-      # handle this.
-      if (dfName == 'basics'):
-        smalls = df['kw_mean'] < 7.0
-        if smalls.any():
-          df = df.loc[smalls,:]
       self.memCache[dfName] = df # cache it for later
-    
-      #df = df.loc[df['therm.mean.annual'] < 10,:]
-      #df = df.loc[df['id'] != 5272657305,:]
-      #pass
     return df
 
   def getMetaData(self,nm): 
