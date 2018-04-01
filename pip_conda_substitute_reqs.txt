@@ -1,0 +1,11 @@
+h5py
+numpy
+scipy
+pandas
+numexpr
+Cython
+tables
+cherrypy
+sqlalchemy
+mysql-connector-python
+jinja2
