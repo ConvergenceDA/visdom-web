@@ -1,0 +1,12 @@
+variable,formula,group,units,type,label
+entropy,,10.shapes,,float,Shannon entropy of load shape selection
+morn_pct,,10.shapes,%,float,morning peak load shape percentage
+day_pct,,10.shapes,%,float,day peak load shape percentage
+eve_pct,,10.shapes,%,float,evening peak load shape percentage
+night_pct,,10.shapes,%,float,night peak load shape percentage
+morn_eve_pct,,10.shapes,%,float,"double peak (morn., eve.) load shape percentage"
+eve_night_pct,,10.shapes,%,float,"double peak (eve., night) load shape percentage"
+day_eve_pct,,10.shapes,%,float,"double peak (day, eve.) load shape percentage"
+morn_day_pct,,10.shapes,%,float,"double peak (morn., day) load shape percentage"
+morn_night_pct,,10.shapes,%,float,"double peak (morn., night) load shape percentage"
+day_night_pct,,10.shapes,%,float,"double peak (day, night) load shape percentage"
